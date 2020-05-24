@@ -1,6 +1,7 @@
 ### 0.4: new note
 
-```title New Note
+```
+title New Note
 
 browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
 server-->browser: HTTP 302: URL redirect: "/notes"
@@ -22,12 +23,14 @@ server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
 note over browser:
 browser executes the event handler
 that renders notes to display
-end note```
+end note
+```
 
 ![0.4_new_note](https://github.com/emilianomacht/FullStackOpen2020/blob/master/part0/0.4_new_note.png)
 
 ### 0.5: Single page app
 
+```
 title Single Page App
 
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
@@ -49,11 +52,13 @@ note over browser:
 browser executes the event handler
 that renders notes to display
 end note
+```
 
 ![0.5_single_page_app](https://github.com/emilianomacht/FullStackOpen2020/blob/master/part0/0.5_single_page_app.png)
 
 ### 0.6: New note on single page app
 
+```
 title New note on single Page App
 
 note over browser:
@@ -70,6 +75,7 @@ browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_s
 server-->browser: HTTP 201: Created
 
 end note
+```
 
 ![0.6_new_note_single_page_app](https://github.com/emilianomacht/FullStackOpen2020/blob/master/part0/0.6_new_note_single_page_app.png)
 
