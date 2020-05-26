@@ -8,6 +8,10 @@ const Button = ({ handleClick, text }) => (
 );
 
 const Statistics = ({ feedback }) => {
+  if (feedback.every(value => value === 0)) {
+    return <p>No feedback given</p>
+  }
+
   const [good, neutral, bad] = [...feedback];
   return (
     <div>
