@@ -1,64 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Header = (props) => {
+const Title = ({ text }) => <h1>{text}</h1>;
+
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
+);
+
+const Statistics = ({ feedback }) => {
+  const [good, neutral, bad] = [...feedback];
   return (
     <div>
-      <h1>{props.course}</h1>
-    </div>
-  );
-};
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.part.name} {props.part.exercises}
-    </p>
-  );
-};
-
-const Content = (props) => {
-  return (
-    <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
-    </div>
-  );
-};
-
-const Total = (props) => {
-  return (
-    <div>
-      <p>Number of exercises {props.parts.reduce( (prev, cur) => prev + cur.exercises, 0)}</p>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
     </div>
   );
 };
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+  // save clicks of each button to own state
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const goodFeedback = () => {
+    setGood(good + 1);
+  };
+
+  const neutralFeedback = () => {
+    setNeutral(neutral + 1);
+  };
+
+  const badFeedback = () => {
+    setBad(bad + 1);
+  };
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Title text="Give feedback" />
+      <Button handleClick={goodFeedback} text="good" />
+      <Button handleClick={neutralFeedback} text="neutral" />
+      <Button handleClick={badFeedback} text="bad" />
+
+      <Title text="Statistics" />
+      <Statistics feedback={[good, neutral, bad]} />
     </div>
   );
 };
