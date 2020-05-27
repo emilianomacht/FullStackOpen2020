@@ -1,27 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Course from './components/Course'
+import React from "react";
+import ReactDOM from "react-dom";
+import Course from "./components/Course";
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
+  const courseData = {
+    name: "Half Stack application development",
     parts: [
       {
-        name: 'Fundamentals of React',
-        exercises: 10
+        name: "Fundamentals of React",
+        exercises: 10,
       },
       {
-        name: 'Using props to pass data',
-        exercises: 7
+        name: "Using props to pass data",
+        exercises: 7,
       },
       {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+        name: "State of a component",
+        exercises: 14,
+      },
+      {
+        name: "Redux",
+        exercises: 11,
+      },
+    ],
+  };
 
-  return <Course course={course} />
-}
+  return <Course course={courseData} /> 
+};
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById("root"));
