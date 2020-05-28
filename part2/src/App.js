@@ -5,28 +5,36 @@ import Filter from "./components/Filter";
 import List from "./components/List";
 
 const App = () => {
-  // const [persons, setPersons] = useState([
-  //   { name: "Arto Hellas", number: "040-123456" },
-  //   { name: "Ada Lovelace", number: "39-44-5323523" },
-  //   { name: "Dan Abramov", number: "12-43-234345" },
-  //   { name: "Mary Poppendieck", number: "39-23-6423122" },
-  // ]);
-
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("");
+  const [countriesToDisplay, setCountriesToDisplay] = useState({});
 
   useEffect(() => {
     axios
       .get("https://restcountries.eu/rest/v2/all")
       .then((response) => {
-        console.log('response.data', response.data)
+        // console.log('response.data', response.data)
         setCountries(response.data);
     });
   }, []);
 
   const handleFilter = (event) => {
-    setFilter(event.target.value);
+    const newFilter = event.target.value;
+
+    setFilter(newFilter);
+    setCountriesToDisplay(
+      countries
+        .filter((country) =>
+          country.name.toLowerCase().includes(newFilter.toLowerCase())
+    ));
   };
+
+  const showSingleCountry = (event) => {
+    // console.log('event.target.name', event.target.name)
+    setCountriesToDisplay(
+      countries.filter(country => event.target.name === country.name)
+    );
+  }
 
   return (
     <div>
@@ -34,7 +42,7 @@ const App = () => {
 
       <Filter handleFilter={handleFilter} filter={filter} />
 
-      <List countries={countries} filter={filter} />
+      <List countries={countriesToDisplay} showSingleCountry={showSingleCountry} />
     </div>
   );
 };
