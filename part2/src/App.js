@@ -8,13 +8,11 @@ const App = () => {
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("");
   const [countriesToDisplay, setCountriesToDisplay] = useState({});
-
+  
   useEffect(() => {
-    axios
-      .get("https://restcountries.eu/rest/v2/all")
-      .then((response) => {
-        // console.log('response.data', response.data)
-        setCountries(response.data);
+    axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+      // console.log('response.data', response.data)
+      setCountries(response.data);
     });
   }, []);
 
@@ -23,18 +21,18 @@ const App = () => {
 
     setFilter(newFilter);
     setCountriesToDisplay(
-      countries
-        .filter((country) =>
-          country.name.toLowerCase().includes(newFilter.toLowerCase())
-    ));
+      countries.filter((country) =>
+        country.name.toLowerCase().includes(newFilter.toLowerCase())
+      )
+    );
   };
 
   const showSingleCountry = (event) => {
     // console.log('event.target.name', event.target.name)
     setCountriesToDisplay(
-      countries.filter(country => event.target.name === country.name)
+      countries.filter((country) => event.target.name === country.name)
     );
-  }
+  };
 
   return (
     <div>
@@ -42,7 +40,10 @@ const App = () => {
 
       <Filter handleFilter={handleFilter} filter={filter} />
 
-      <List countries={countriesToDisplay} showSingleCountry={showSingleCountry} />
+      <List
+        countries={countriesToDisplay}
+        showSingleCountry={showSingleCountry}
+      />
     </div>
   );
 };
