@@ -44,15 +44,25 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
     } else {
       // setPersons(persons.concat({ name: newName, number: newNumber }));
-      noteService.create({
-        name: newName,
-        number: newNumber,
-      }).then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-      });
+      noteService
+        .create({
+          name: newName,
+          number: newNumber,
+        })
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        });
     }
+  };
+
+  const deletePerson = (personToDelete) => {
+    if (!window.confirm(`Delete ${personToDelete.name}?`)) return;
+
+    noteService
+      .remove(personToDelete.id)
+      .then(setPersons(persons.filter((person) => person.id !== personToDelete.id)));
   };
 
   return (
@@ -73,7 +83,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson} />
     </div>
   );
 };
