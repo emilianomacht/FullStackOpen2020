@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import noteService from "./services/notes";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -19,7 +20,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
+    noteService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -43,14 +44,14 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
     } else {
       // setPersons(persons.concat({ name: newName, number: newNumber }));
-      axios
-        .post("http://localhost:3001/persons", {
-          name: newName,
-          number: newNumber,
-        })
-        .then((response) => setPersons(persons.concat(response.data)));
-      setNewName("");
-      setNewNumber("");
+      noteService.create({
+        name: newName,
+        number: newNumber,
+      }).then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
