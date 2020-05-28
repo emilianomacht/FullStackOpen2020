@@ -2,48 +2,77 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Filter from "./components/Filter";
-import List from "./components/List";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
-  const [countries, setCountries] = useState([]);
+  // const [persons, setPersons] = useState([
+  //   { name: "Arto Hellas", number: "040-123456" },
+  //   { name: "Ada Lovelace", number: "39-44-5323523" },
+  //   { name: "Dan Abramov", number: "12-43-234345" },
+  //   { name: "Mary Poppendieck", number: "39-23-6423122" },
+  // ]);
+
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [countriesToDisplay, setCountriesToDisplay] = useState({});
-  
+
   useEffect(() => {
-    axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
-      // console.log('response.data', response.data)
-      setCountries(response.data);
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
     });
   }, []);
 
-  const handleFilter = (event) => {
-    const newFilter = event.target.value;
-
-    setFilter(newFilter);
-    setCountriesToDisplay(
-      countries.filter((country) =>
-        country.name.toLowerCase().includes(newFilter.toLowerCase())
-      )
-    );
+  const handleNewName = (event) => {
+    setNewName(event.target.value);
   };
 
-  const showSingleCountry = (event) => {
-    // console.log('event.target.name', event.target.name)
-    setCountriesToDisplay(
-      countries.filter((country) => event.target.name === country.name)
-    );
+  const handleNewNumber = (event) => {
+    setNewNumber(event.target.value);
+  };
+
+  const handleFilter = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const addPerson = (event) => {
+    event.preventDefault();
+
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      // setPersons(persons.concat({ name: newName, number: newNumber }));
+      axios
+        .post("http://localhost:3001/persons", {
+          name: newName,
+          number: newNumber,
+        })
+        .then((response) => setPersons(persons.concat(response.data)));
+      setNewName("");
+      setNewNumber("");
+    }
   };
 
   return (
     <div>
-      <h2>Data for countries</h2>
+      <h2>Phonebook</h2>
 
       <Filter handleFilter={handleFilter} filter={filter} />
 
-      <List
-        countries={countriesToDisplay}
-        showSingleCountry={showSingleCountry}
+      <h3>Add new person</h3>
+
+      <PersonForm
+        addPerson={addPerson}
+        handleNewName={handleNewName}
+        newName={newName}
+        handleNewNumber={handleNewNumber}
+        newNumber={newNumber}
       />
+
+      <h3>Numbers</h3>
+
+      <Persons persons={persons} filter={filter} />
     </div>
   );
 };
