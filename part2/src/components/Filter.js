@@ -4,7 +4,7 @@ const Filter = ({handleFilter, filter}) => {
 
   return (
     <div>
-      filter shown with <input onChange={handleFilter} value={filter} />
+      find countries <input onChange={handleFilter} value={filter} />
     </div>
   );
 };
