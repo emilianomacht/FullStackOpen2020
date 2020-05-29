@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
+import './index.css';
+
 import noteService from "./services/notes";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from './components/Notification';
 // import notes from "./services/notes";
 
 const App = () => {
@@ -19,6 +22,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     noteService.getAll().then((response) => {
@@ -70,6 +74,10 @@ const App = () => {
           setPersons(persons.concat(response.data));
           setNewName("");
           setNewNumber("");
+          setNotificationMessage(`Added ${response.data.name}`)
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         });
     }
   };
@@ -91,6 +99,8 @@ const App = () => {
       <Filter handleFilter={handleFilter} filter={filter} />
 
       <h3>Add new person</h3>
+
+      <Notification message={notificationMessage} />
 
       <PersonForm
         addPerson={addPerson}
