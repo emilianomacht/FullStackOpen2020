@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
-import './index.css';
+import "./index.css";
 
 import noteService from "./services/notes";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import Notification from './components/Notification';
+import Notification from "./components/Notification";
 // import notes from "./services/notes";
 
 const App = () => {
@@ -22,7 +22,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [isNotificationSuccesful, setIsNotificationSuccesful] = useState(true);
 
   useEffect(() => {
     noteService.getAll().then((response) => {
@@ -54,7 +55,13 @@ const App = () => {
               : person
           )
         )
-      );
+      )
+      .catch(() => {
+        setNotificationMessage(
+          `${personToUpdate.name} has been removed from server. Please reload the page.`
+        );
+        setIsNotificationSuccesful(false);
+      });
   };
 
   const addPerson = (event) => {
@@ -62,7 +69,9 @@ const App = () => {
 
     if (persons.some((person) => person.name === newName)) {
       // alert(`${newName} is already added to phonebook`);
-      window.confirm(`${newName} is already on phonebook. Replace old number with new one?`) && updatePerson();
+      window.confirm(
+        `${newName} is already on phonebook. Replace old number with new one?`
+      ) && updatePerson();
     } else {
       // setPersons(persons.concat({ name: newName, number: newNumber }));
       noteService
@@ -74,7 +83,8 @@ const App = () => {
           setPersons(persons.concat(response.data));
           setNewName("");
           setNewNumber("");
-          setNotificationMessage(`Added ${response.data.name}`)
+          setNotificationMessage(`Added ${response.data.name}`);
+          setIsNotificationSuccesful(true);
           setTimeout(() => {
             setNotificationMessage(null);
           }, 5000);
@@ -100,7 +110,10 @@ const App = () => {
 
       <h3>Add new person</h3>
 
-      <Notification message={notificationMessage} />
+      <Notification
+        message={notificationMessage}
+        isSuccesful={isNotificationSuccesful}
+      />
 
       <PersonForm
         addPerson={addPerson}
