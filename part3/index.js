@@ -59,22 +59,35 @@ app.delete("/api/persons/:id", (req, res) => {
   const personToDelete = persons.find((person) => person.id !== id);
 
   if (personToDelete) {
-    persons = persons.filter(person => person.id !== id);
+    persons = persons.filter((person) => person.id !== id);
     res.status(204).end();
   } else {
     res.status(404).end();
   }
 });
 
-app.post('/api/persons', (req, res) => {
+app.post("/api/persons", (req, res) => {
+  if (!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("number")) {
+    return res.status(400).json({
+      error: "Request must have name and number",
+    });
+  }
+
+  const reqName = req.body.name.toString();
+  if (persons.some(person => person.name === reqName)) {
+    return res.status(400).json({
+      "error": "Name already on phonebook"
+    });
+  }
+
   const newPerson = {
-    name: req.body.name.toString(),
+    name: reqName,
     number: req.body.number.toString(),
-    id: Math.floor(Math.random() * 1000)
+    id: Math.floor(Math.random() * 1000),
   };
   persons.push(newPerson);
   res.json(newPerson);
-})
+});
 
 const port = 3001;
 app.listen(port);
