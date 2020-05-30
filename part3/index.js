@@ -32,18 +32,25 @@ let persons = [
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
-})
+});
 
 app.get('/api/persons', (req, res) => {
   res.json(persons)
-})
+});
+
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const personToSend = persons.find(person => person.id === id);
+  
+  personToSend ? res.send(personToSend) : res.status(404).end();
+});
 
 app.get('/info', (req, res) => {
   const curDate = new Date();
   let stringToSend = `<p>Phonebook has info for ${persons.length} people</p>`;
   stringToSend += `<p>${curDate}</p>`;
   res.send(stringToSend);
-})
+});
 
 const port = 3001
 app.listen(port)
