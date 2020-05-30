@@ -1,11 +1,12 @@
 // const http = require('http')
 const express = require("express");
-const morgan = require('morgan');
+const morgan = require("morgan");
 
 const app = express();
 
-app.use(morgan('tiny'));
 app.use(express.json());
+morgan.token("JSON-POST", (req, res) => JSON.stringify(req.body));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :JSON-POST"));
 
 let persons = [
   {
@@ -77,9 +78,9 @@ app.post("/api/persons", (req, res) => {
   }
 
   const reqName = req.body.name.toString();
-  if (persons.some(person => person.name === reqName)) {
+  if (persons.some((person) => person.name === reqName)) {
     return res.status(400).json({
-      "error": "Name already on phonebook"
+      error: "Name already on phonebook",
     });
   }
 
