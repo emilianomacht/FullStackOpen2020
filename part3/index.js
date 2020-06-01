@@ -1,9 +1,11 @@
 // const http = require('http')
 const express = require("express");
 const morgan = require("morgan");
+const cors = require('cors')
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 morgan.token("JSON-POST", (req, res) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :JSON-POST"));
@@ -29,6 +31,11 @@ let persons = [
     number: "39-23-6423122",
     id: 4,
   },
+  {
+    name: "EMI",
+    number: "1234890",
+    id: 5
+  }
 ];
 
 // const app = http.createServer((request, response) => {
