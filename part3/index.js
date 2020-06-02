@@ -2,8 +2,8 @@
 require('dotenv').config();
 const express = require("express");
 const morgan = require("morgan");
-const cors = require('cors')
-const mongoose = require("mongoose");
+const cors = require('cors');
+const Person = require('./models/person');
 
 const app = express();
 
@@ -42,20 +42,6 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms :J
 //   }
 // ];
 
-const url = process.env.MONGODB_URI;
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-});
-personSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-});
-const Person = mongoose.model("Person", personSchema);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello World!</h1>");
