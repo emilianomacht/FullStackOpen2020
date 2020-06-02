@@ -5,7 +5,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
 
-
 const app = express();
 
 app.use(cors());
@@ -75,29 +74,31 @@ app.post("/api/persons", (req, res, next) => {
     number: req.body.number.toString(),
   });
 
-  newPerson.save().then((savedPerson) => {
-    res.json(newPerson);
-  })
-  .catch(error => next(error));
+  newPerson
+    .save()
+    .then((savedPerson) => {
+      res.json(newPerson);
+    })
+    .catch((error) => next(error));
 });
 
-app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body;
 
   const person = {
     name: body.name,
     number: body.number,
-  }
+  };
 
   Person.findByIdAndUpdate(request.params.id, person, { new: true })
-    .then(updatedperson => {
-      response.json(updatedperson)
+    .then((updatedperson) => {
+      response.json(updatedperson);
     })
-    .catch(error => next(error))
-})
+    .catch((error) => next(error));
+});
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+  response.status(404).send({ error: "unknown endpoint" });
 };
 
 app.use(unknownEndpoint);
@@ -107,17 +108,16 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-
 const errorHandler = (error, request, response, next) => {
   console.error(error);
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: error.errors.name.message })
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ errors: error.errors });
   }
 
   next(error);
-}
+};
 
 app.use(errorHandler);
