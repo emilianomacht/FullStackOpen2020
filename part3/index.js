@@ -65,26 +65,24 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 app.post("/api/persons", (req, res) => {
+  if (req.body === undefined) {
+    return res.status(400).json({ error: "Request must have name and number" });
+  }
+
   if (!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("number")) {
     return res.status(400).json({
       error: "Request must have name and number",
     });
   }
 
-  const reqName = req.body.name.toString();
-  if (persons.some((person) => person.name === reqName)) {
-    return res.status(400).json({
-      error: "Name already on phonebook",
-    });
-  }
+  const newPerson = new Person({
+    name: req.body.name.toString(),
+    number: req.body.number.toString()
+  });
 
-  const newPerson = {
-    name: reqName,
-    number: req.body.number.toString(),
-    id: Math.floor(Math.random() * 1000),
-  };
-  persons.push(newPerson);
-  res.json(newPerson);
+  newPerson.save().then(savedPerson => {
+    res.json(newPerson);
+  })
 });
 
 // const port = 3001;
