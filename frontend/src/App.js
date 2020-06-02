@@ -92,6 +92,18 @@ const App = () => {
           setTimeout(() => {
             setNotificationMessage(null);
           }, 5000);
+        })
+        .catch((error) => {
+          const errors = error.response.data.errors;
+          let errorString = '';
+          for (let errorProp in errors) {
+            errorString += errors[errorProp].properties.message + " ";
+          }
+          setNotificationMessage(`${errorString}`);
+          setIsNotificationSuccesful(false);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         });
     }
   };
