@@ -32,36 +32,33 @@ app.get("/api/persons", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const id = req.params.id;
-  Person.findById(id).then((result) => {
-    result !== null 
-    ? res.json(result) 
-    : res.status(404).end();
-  }).catch(error => {
-    console.log(error);
-    res.status(404).end();
-  });
+  Person.findById(id)
+    .then((result) => {
+      result !== null ? res.json(result) : res.status(404).end();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).end();
+    });
 });
 
 app.get("/info", (req, res) => {
   const curDate = new Date();
-  let stringToSend = '';
-  Person.count({}).then(count => {
+  let stringToSend = "";
+  Person.count({}).then((count) => {
     stringToSend += `<p>Phonebook has info for ${count} people</p>`;
     stringToSend += `<p>${curDate}</p>`;
     res.send(stringToSend);
-  })
+  });
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const personToDelete = persons.find((person) => person.id !== id);
-
-  if (personToDelete) {
-    persons = persons.filter((person) => person.id !== id);
-    res.status(204).end();
-  } else {
-    res.status(404).end();
-  }
+  const id = req.params.id;
+  Person.findByIdAndRemove(id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -77,13 +74,28 @@ app.post("/api/persons", (req, res) => {
 
   const newPerson = new Person({
     name: req.body.name.toString(),
-    number: req.body.number.toString()
+    number: req.body.number.toString(),
   });
 
-  newPerson.save().then(savedPerson => {
+  newPerson.save().then((savedPerson) => {
     res.json(newPerson);
-  })
+  });
 });
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedperson => {
+      response.json(updatedperson)
+    })
+    .catch(error => next(error))
+})
 
 // const port = 3001;
 // app.listen(port);
