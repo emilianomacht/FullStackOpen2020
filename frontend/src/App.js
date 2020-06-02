@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import "./index.css";
 
-import noteService from "./services/notes";
+import personService from "./services/persons";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -26,7 +26,7 @@ const App = () => {
   const [isNotificationSuccesful, setIsNotificationSuccesful] = useState(true);
 
   useEffect(() => {
-    noteService.getAll().then((response) => {
+    personService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -45,7 +45,7 @@ const App = () => {
 
   const updatePerson = () => {
     const personToUpdate = persons.find((person) => person.name === newName);
-    noteService
+    personService
       .update(personToUpdate.id, { name: newName, number: newNumber })
       .then(
         setPersons(
@@ -67,35 +67,38 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name === newName)) {
-      // alert(`${newName} is already added to phonebook`);
-      window.confirm(
-        `${newName} is already on phonebook. Replace old number with new one?`
-      ) && updatePerson();
-    } else {
-      // setPersons(persons.concat({ name: newName, number: newNumber }));
-      noteService
-        .create({
-          name: newName,
-          number: newNumber,
-        })
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNumber("");
-          setNotificationMessage(`Added ${response.data.name}`);
-          setIsNotificationSuccesful(true);
-          setTimeout(() => {
-            setNotificationMessage(null);
-          }, 5000);
-        });
+    if (newName === "" || newNumber === "") {
+      return;
     }
+
+    // if (persons.some((person) => person.name === newName)) {
+    //   // alert(`${newName} is already added to phonebook`);
+    //   window.confirm(
+    //     `${newName} is already on phonebook. Replace old number with new one?`
+    //   ) && updatePerson();
+    // } else {
+    // setPersons(persons.concat({ name: newName, number: newNumber }));
+    personService
+      .create({
+        name: newName,
+        number: newNumber,
+      })
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+        setNotificationMessage(`Added ${response.data.name}`);
+        setIsNotificationSuccesful(true);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      });
   };
 
   const deletePerson = (personToDelete) => {
     if (!window.confirm(`Delete ${personToDelete.name}?`)) return;
 
-    noteService
+    personService
       .remove(personToDelete.id)
       .then(
         setPersons(persons.filter((person) => person.id !== personToDelete.id))
