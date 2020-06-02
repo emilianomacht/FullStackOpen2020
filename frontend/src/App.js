@@ -71,28 +71,29 @@ const App = () => {
       return;
     }
 
-    // if (persons.some((person) => person.name === newName)) {
-    //   // alert(`${newName} is already added to phonebook`);
-    //   window.confirm(
-    //     `${newName} is already on phonebook. Replace old number with new one?`
-    //   ) && updatePerson();
-    // } else {
-    // setPersons(persons.concat({ name: newName, number: newNumber }));
-    personService
-      .create({
-        name: newName,
-        number: newNumber,
-      })
-      .then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-        setNotificationMessage(`Added ${response.data.name}`);
-        setIsNotificationSuccesful(true);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 5000);
-      });
+    if (persons.some((person) => person.name === newName)) {
+      // alert(`${newName} is already added to phonebook`);
+      window.confirm(
+        `${newName} is already on phonebook. Replace old number with new one?`
+      ) && updatePerson();
+    } else {
+      // setPersons(persons.concat({ name: newName, number: newNumber }));
+      personService
+        .create({
+          name: newName,
+          number: newNumber,
+        })
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+          setNotificationMessage(`Added ${response.data.name}`);
+          setIsNotificationSuccesful(true);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        });
+    }
   };
 
   const deletePerson = (personToDelete) => {
