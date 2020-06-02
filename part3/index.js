@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
 
+
 const app = express();
 
 app.use(cors());
@@ -58,7 +59,7 @@ app.delete("/api/persons/:id", (req, res) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   if (req.body === undefined) {
     return res.status(400).json({ error: "Request must have name and number" });
   }
@@ -76,7 +77,8 @@ app.post("/api/persons", (req, res) => {
 
   newPerson.save().then((savedPerson) => {
     res.json(newPerson);
-  });
+  })
+  .catch(error => next(error));
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -107,11 +109,13 @@ app.listen(PORT, () => {
 
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(error);
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.errors.name.message })
+  }
 
   next(error);
 }
