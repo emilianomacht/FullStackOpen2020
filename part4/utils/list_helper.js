@@ -1,4 +1,4 @@
-// const lodashArray = require('lodash/array')
+const lodashArray = require('lodash/array')
 const lodashCollection = require('lodash/collection')
 
 // eslint-disable-next-line no-unused-vars
@@ -33,9 +33,28 @@ const mostBlogs = (blogs) => {
   return authorsArray[0]
 }
 
+const mostLikes = (blogs) => {
+  let authors = lodashArray
+    .uniqBy(blogs, 'author')
+    .map(obj => ({
+      author: obj.author,
+      likes: 0 }))
+  authors.forEach(author => {
+    const authorName = author.author
+    blogs.forEach(post => {
+      if (post.author === authorName) {
+        author.likes += post.likes
+      }
+    })
+  })
+  authors.sort((A, B) => B.likes - A.likes)
+  return authors[0]
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
