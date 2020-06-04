@@ -29,12 +29,13 @@ test('all blogs are returned', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
-test('unique identifier is named id', () => {
-  const newBlog = new Blog()
-  expect(newBlog.id).toBeDefined()
+test.only('unique identifier is named id', async () => {
+  const blogsInDb = await helper.blogsInDb()
+  // console.log('blogsInDb', blogsInDb)
+  expect(blogsInDb[0].id).toBeDefined()
 })
 
-test.only('HTTP POST succesfully creates blog post', async () => {
+test('HTTP POST succesfully creates blog post', async () => {
   const testPost = {
     title: 'HTTP POST succesfully creates blog post',
     author: 'String',
