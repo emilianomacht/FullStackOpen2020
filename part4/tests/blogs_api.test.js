@@ -34,6 +34,26 @@ test('unique identifier is named id', () => {
   expect(newBlog.id).toBeDefined()
 })
 
+test.only('HTTP POST succesfully creates blog post', async () => {
+  const testPost = {
+    title: 'HTTP POST succesfully creates blog post',
+    author: 'String',
+    url: 'String',
+    likes: 7357
+  }
+
+  await api.post('/api/blogs')
+    .send(testPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsInDb = await helper.blogsInDb()
+
+  expect(blogsInDb.length).toBe(helper.initialBlogs.length + 1)
+  const titles = blogsInDb.map(blog => blog.title)
+  expect(titles).toContain('HTTP POST succesfully creates blog post')
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
