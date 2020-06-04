@@ -34,7 +34,7 @@ test('unique identifier is named id', async () => {
   expect(blogsInDb[0].id).toBeDefined()
 })
 
-test.only('HTTP POST succesfully creates blog post', async () => {
+test('HTTP POST succesfully creates blog post', async () => {
   const testPost = {
     title: 'HTTP POST succesfully creates blog post',
     author: 'String',
@@ -52,6 +52,21 @@ test.only('HTTP POST succesfully creates blog post', async () => {
   expect(blogsInDb.length).toBe(helper.initialBlogs.length + 1)
   const ids = blogsInDb.map(blog => blog.id)
   expect(ids).toContain(response.body.id)
+})
+
+test.only('if likes is missing, defaults to 0', async () => {
+  const testPost = {
+    title: 'title',
+    author: 'String',
+    url: 'String'
+  }
+
+  const response = await api.post('/api/blogs')
+    .send(testPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body.likes).toBe(0)
 })
 
 
