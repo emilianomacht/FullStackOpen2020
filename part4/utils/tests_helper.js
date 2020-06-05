@@ -65,6 +65,14 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const initialUsers = [
+  { username: 'uname1', name: 'n1', password: 'hola1' },
+  { username: 'uname2', name: 'n2', password: 'hola2' },
+  { username: 'uname3', name: 'n3', password: 'hola3' },
+  { username: 'uname4', name: 'n4', password: 'hola4' },
+  { username: 'uname5', name: 'n5', password: 'hola5' },
+]
+
 module.exports = {
   totalLikes,
   favoriteBlog,
@@ -72,5 +80,6 @@ module.exports = {
   mostLikes,
   initialBlogs,
   blogsInDb,
-  usersInDb
+  usersInDb,
+  initialUsers
 }
