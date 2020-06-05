@@ -100,7 +100,7 @@ describe('deleting blog-post', () => {
   })
 })
 
-describe.only('updating blog-post', () => {
+describe('updating blog-post', () => {
   test('succeeds with statuscode 200 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
@@ -115,6 +115,8 @@ describe.only('updating blog-post', () => {
     expect(result.body.title).toBe('updated post')
   })
 })
+
+
 
 afterAll(() => {
   mongoose.connection.close()
