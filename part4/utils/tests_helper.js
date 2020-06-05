@@ -1,4 +1,51 @@
 const Blog = require('../models/blog')
+const lodashArray = require('lodash/array')
+const lodashCollection = require('lodash/collection')
+
+const totalLikes = (blogs) => {
+  return blogs.reduce((sum, post) => post.likes + sum, 0)
+}
+
+const favoriteBlog = (blogs) => {
+  const sortedBlogs = [...blogs]
+  sortedBlogs.sort((postA, postB) => postB.likes - postA.likes)
+  return ({
+    title: sortedBlogs[0].title,
+    author: sortedBlogs[0].author,
+    likes: sortedBlogs[0].likes
+  })
+}
+
+const mostBlogs = (blogs) => {
+  let authors = lodashCollection.countBy(blogs, 'author')
+  let authorsArray = []
+  for (let author in authors) {
+    authorsArray.push({
+      author: author,
+      blogs: authors[author]
+    })
+  }
+  authorsArray.sort((A, B) => B.blogs - A.blogs)
+  return authorsArray[0]
+}
+
+const mostLikes = (blogs) => {
+  let authors = lodashArray
+    .uniqBy(blogs, 'author')
+    .map(obj => ({
+      author: obj.author,
+      likes: 0 }))
+  authors.forEach(author => {
+    const authorName = author.author
+    blogs.forEach(post => {
+      if (post.author === authorName) {
+        author.likes += post.likes
+      }
+    })
+  })
+  authors.sort((A, B) => B.likes - A.likes)
+  return authors[0]
+}
 
 const initialBlogs = [{ _id: '5a422a851b54a676234d17f7', title: 'React patterns', author: 'Michael Chan', url: 'https://reactpatterns.com/', likes: 7, __v: 0 },
   { _id: '5a422aa71b54a676234d17f8', title: 'Go To Statement Considered Harmful', author: 'Edsger W. Dijkstra', url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html', likes: 5, __v: 0 },
@@ -14,5 +61,9 @@ const blogsInDb = async () => {
 
 module.exports = {
   initialBlogs,
-  blogsInDb
+  blogsInDb,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
 }

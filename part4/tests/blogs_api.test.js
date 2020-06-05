@@ -3,7 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const api = supertest(app)
-const helper = require('../utils/blog_api_test_helper')
+const helper = require('../utils/tests_helper')
 
 jest.setTimeout(20000)
 
