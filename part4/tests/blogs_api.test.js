@@ -83,7 +83,7 @@ describe('adding new blog-post', () => {
   })
 })
 
-describe.only('deleting blog-post', () => {
+describe('deleting blog-post', () => {
   test('succeeds with statuscode 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
@@ -100,6 +100,21 @@ describe.only('deleting blog-post', () => {
   })
 })
 
+describe.only('updating blog-post', () => {
+  test('succeeds with statuscode 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    blogToUpdate.title = 'updated post'
+
+    const result = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+
+    expect(result.body.id).toBe(blogToUpdate.id)
+    expect(result.body.title).toBe('updated post')
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
