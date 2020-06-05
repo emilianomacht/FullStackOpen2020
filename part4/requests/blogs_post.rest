@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtaSIsImlkIjoiNWVkYWMwZDYzMzdkM2QwYzlmZDA0NWIyIiwiaWF0IjoxNTkxMzk1MjY5fQ.PICPjN1g7A2-i-kzYNs17_5YydsPkeJ_sR3YwfWtKkc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtaSIsImlkIjoiNWVkYWMwZDYzMzdkM2QwYzlmZDA0NWIyIiwiaWF0IjoxNTkxMzk2ODM4fQ.S9vbmHwpg5Fnq2fzr8G_Yx25ChIIJT5vpT-euMqRYu8
 
 {
-  "title": "new post! 2",
+  "title": "new post! 3",
   "author": "yo",
-  "url": "String",
+  "url": "with middleware",
   "likes": 9999999
 }
