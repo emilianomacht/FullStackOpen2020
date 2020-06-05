@@ -7,6 +7,24 @@ const helper = require('../utils/tests_helper')
 
 jest.setTimeout(20000)
 
+let dummyToken = ''
+
+beforeAll(async () => {
+  const dummyUser = {
+    'username': 'dummy',
+    'password': 'pswd'
+  }
+  await api
+    .post('/api/users')
+    .send(dummyUser)
+
+  const respLogin = await api
+    .post('/api/login')
+    .send(dummyUser)
+
+  dummyToken = respLogin.body.token
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -15,7 +33,7 @@ beforeEach(async () => {
     await blogObject.save()
   }
 })
-describe('notes saved initially', () => {
+describe('blogs saved initially', () => {
   test('blog-posts are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -45,6 +63,7 @@ describe('adding new blog-post', () => {
     }
 
     const response = await api.post('/api/blogs')
+      .set('Authorization', `bearer ${dummyToken}`)
       .send(testPost)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -64,6 +83,7 @@ describe('adding new blog-post', () => {
     }
 
     const response = await api.post('/api/blogs')
+      .set('Authorization', `bearer ${dummyToken}`)
       .send(testPost)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -78,25 +98,54 @@ describe('adding new blog-post', () => {
     }
 
     await api.post('/api/blogs')
+      .set('Authorization', `bearer ${dummyToken}`)
       .send(testPost)
       .expect(400)
+  })
+
+  test('fails with 401 if token is not provided', async () => {
+    const testPost = {
+      author: 'String',
+      likes: 1
+    }
+
+    await api.post('/api/blogs')
+      .set('Authorization', 'bearer WRONG_TOKEN')
+      .send(testPost)
+      .expect(401)
   })
 })
 
 describe('deleting blog-post', () => {
   test('succeeds with statuscode 204 if id is valid', async () => {
+
+    // const blogToDelete = blogsAtStart[0]
+
+    const testPost = {
+      title: 'HTTP POST succesfully creates blog post',
+      author: 'String',
+      url: 'String',
+      likes: 7357
+    }
+
+    const response = await api.post('/api/blogs')
+      .set('Authorization', `bearer ${dummyToken}`)
+      .send(testPost)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
 
     await api
-      .delete(`/api/blogs/${blogToDelete.id}`)
+      .delete(`/api/blogs/${response.body.id}`)
+      .set('Authorization', `bearer ${dummyToken}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
 
     expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
     const idsBlogsAtEnd = blogsAtEnd.map(b => b.id)
-    expect(idsBlogsAtEnd).not.toContain(blogToDelete.id)
+    expect(idsBlogsAtEnd).not.toContain(response.body.id)
   })
 })
 

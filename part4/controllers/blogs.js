@@ -18,16 +18,16 @@ blogsRouter.post('/', async (request, response, next) => {
 
     const user = await User.findById(decodedToken.id)
 
-    console.log('user', user)
+    // console.log('user', user)
     const blog = new Blog({
       ...request.body,
       user: user._id
     })
 
     const result = await blog.save()
-    console.log('user before', user)
+    // console.log('user before', user)
     user.blogs = user.blogs.concat(result._id)
-    console.log('user after', user)
+    // console.log('user after', user)
     user.save()
     response.status(201).json(result)
   } catch (error) {
