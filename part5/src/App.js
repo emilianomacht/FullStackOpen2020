@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -33,7 +35,7 @@ const App = () => {
     setPassword(target.value)
   }
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({
@@ -49,6 +51,10 @@ const App = () => {
       console.log('exception', exception)
       setUsername('')
       setPassword('')
+      setNotificationMessage('Wrong username or password')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000);
     }
   }
 
@@ -65,8 +71,15 @@ const App = () => {
         author: newBlogAuthor,
         url: newBlogUrl
       })
+      setNotificationMessage(`New blog post by ${newBlogAuthor} added`)
+      setNewBlogAuthor('')
+      setNewBlogTitle('')
+      setNewBlogUrl('')
       const blogs = await blogService.getAll()
       setBlogs(blogs)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     } catch (error) {
       console.log('error', error)
     }
@@ -76,7 +89,8 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        <form onSubmit={handleSubmit}>
+        <Notification message={notificationMessage} isPositive={false} />
+        <form onSubmit={handleLogin}>
           <div>
             <label htmlFor="username">username</label>
             <input type="text" id="username" value={username} onChange={handleUsername} />
@@ -85,7 +99,7 @@ const App = () => {
             <label htmlFor="password">password</label>
             <input type="password" id="password" value={password} onChange={handlePassword} />
           </div>
-          <button onClick={handleSubmit}>log in</button>
+          <button onClick={handleLogin}>log in</button>
         </form>
       </div>
     )
@@ -93,6 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notificationMessage} isPositive={true} />
       <span>
         {user.name}
         {' '}
