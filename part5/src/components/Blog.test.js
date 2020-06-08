@@ -2,6 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
+import NewBlog from './NewBlog'
 
 const blog = {
   title: 'test-title',
@@ -59,6 +60,36 @@ test('handleLike is called twice if button is clicked twice', () => {
   fireEvent.click(likeButton)
 
   expect(mockHandler.mock.calls).toHaveLength(2)
+})
+
+test('new blog form submits correct inputs', () => {
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <NewBlog handleNewBlogPost={mockHandler}/>
+  )
+
+  const titleInput = component.container.querySelector('#title')
+  const authorInput = component.container.querySelector('#author')
+  const urlInput = component.container.querySelector('#url')
+  const form = component.container.querySelector('form')
+
+  fireEvent.change(titleInput, {
+    target: { value: 'title-input test' }
+  })
+  fireEvent.change(authorInput, {
+    target: { value: 'author-input test' }
+  })
+  fireEvent.change(urlInput, {
+    target: { value: 'url-input test' }
+  })
+  fireEvent.submit(form)
+
+  expect(mockHandler.mock.calls).toHaveLength(1)
+  expect(mockHandler.mock.calls[0][0]['title']).toBe('title-input test')
+  expect(mockHandler.mock.calls[0][0]['author']).toBe('author-input test')
+  expect(mockHandler.mock.calls[0][0]['url']).toBe('url-input test')
+
 })
 
 // expect(component.container).toHaveClass('title')
