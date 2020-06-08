@@ -10,7 +10,6 @@ const NewBlog = ({
 
   const createBlogPost = (event) => {
     event.preventDefault()
-    console.log('hola')
     handleNewBlogPost({
       title: newBlogTitle,
       author: newBlogAuthor,

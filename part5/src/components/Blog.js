@@ -4,8 +4,10 @@
 import React, { useState } from 'react'
 import '../styles/Blog.css'
 
-const Blog = ({ blog, handleNewLike }) => {
+const Blog = ({ blog, handleNewLike, handleDelete, user }) => {
   const [showDetails, setShowDetails] = useState(false)
+
+  const showDeleteButton = blog.user.username === user.username
 
   const toggleShowDetails = () => {
     setShowDetails(!showDetails)
@@ -25,6 +27,7 @@ const Blog = ({ blog, handleNewLike }) => {
         <button onClick={newLike}>like</button>
       </p>
       <p>{blog.user.name}</p>
+      {showDeleteButton ? <button onClick={() => handleDelete(blog)}>delete</button> : null}
     </div>
   )
 

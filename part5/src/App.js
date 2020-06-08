@@ -60,7 +60,11 @@ const App = () => {
   const handleNewBlogPost = async (newBlogPost) => {
     try {
       const resp = await blogService.create(newBlogPost)
-      setBlogs(blogs.concat(resp.data))
+      const blogToRender = {
+        ...resp.data,
+        user,
+      }
+      setBlogs(blogs.concat(blogToRender))
 
       setNotificationMessage(`New blog post by ${newBlogPost.author} added`)
       setTimeout(() => {
@@ -83,6 +87,18 @@ const App = () => {
       setBlogs(updatedBlogs)
     } catch (error) {
       console.log('error', error)
+    }
+  }
+
+  const handleDelete = async (postToDelete) => {
+    const deleteConfirmation = window.confirm(`Remove blog ${postToDelete.title} by ${postToDelete.author}?`)
+    if (!deleteConfirmation) return null
+
+    try {
+      await blogService.remove(postToDelete)
+      setBlogs(blogs.filter(blog => blog.id !== postToDelete.id))
+    } catch (e) {
+      console.log('error', e)
     }
   }
 
@@ -122,7 +138,13 @@ const App = () => {
       <h3>blog post list</h3>
       {blogs
         .sort((A, B) => B.likes - A.likes)
-        .map((blog) => <Blog key={blog.id} blog={blog} handleNewLike={handleNewLike} />)
+        .map((blog) => <Blog 
+          key={blog.id} 
+          blog={blog} 
+          handleNewLike={handleNewLike} 
+          handleDelete={handleDelete}
+          user={user}
+        />)
       }
     </div>
   )
