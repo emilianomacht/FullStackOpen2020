@@ -120,7 +120,10 @@ const App = () => {
         />
       </Toggable>
       <h3>blog post list</h3>
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} handleNewLike={handleNewLike} />)}
+      {blogs
+        .sort((A, B) => B.likes - A.likes)
+        .map((blog) => <Blog key={blog.id} blog={blog} handleNewLike={handleNewLike} />)
+      }
     </div>
   )
 }
