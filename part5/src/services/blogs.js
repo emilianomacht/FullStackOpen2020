@@ -20,4 +20,12 @@ const create = async newPost => {
   return resp
 }
 
-export default { getAll, setToken, create }
+const update = async updatedPost => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const resp = await axios.put(`${baseUrl}/${updatedPost.id}`, updatedPost, config)
+  return resp
+}
+
+export default { getAll, setToken, create, update }

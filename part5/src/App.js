@@ -71,6 +71,21 @@ const App = () => {
     }
   }
 
+  const handleNewLike = async (updatedPost) => {
+    try {
+      const resp = await blogService.update(updatedPost)
+      const blogToRender = {
+        ...resp.data,
+        user: updatedPost.user
+      }
+      const updatedBlogs = blogs
+        .map(blog => blog.id === resp.data.id ? blogToRender : blog)
+      setBlogs(updatedBlogs)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   if (user === null) {
     return (
       <div>
@@ -105,7 +120,7 @@ const App = () => {
         />
       </Toggable>
       <h3>blog post list</h3>
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
+      {blogs.map((blog) => <Blog key={blog.id} blog={blog} handleNewLike={handleNewLike} />)}
     </div>
   )
 }
