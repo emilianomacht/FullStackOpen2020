@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable react/prop-types */
 
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import '../styles/Blog.css'
 
 const Blog = ({ blog, handleNewLike, handleDelete, user }) => {
@@ -38,6 +38,13 @@ const Blog = ({ blog, handleNewLike, handleDelete, user }) => {
       {showDetails ? details : null}
     </div>
   )
+}
+
+Blog.propTypes = {
+  handleNewLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  blog: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 export default Blog

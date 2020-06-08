@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const NewBlog = ({
   handleNewBlogPost
@@ -26,35 +27,39 @@ const NewBlog = ({
       <form onSubmit={createBlogPost}>
         <div>
           <label htmlFor="title">title </label>
-          <input 
-            type="text" 
-            id="title" 
-            value={newBlogTitle} 
-            onChange={({ target }) => setNewBlogTitle(target.value)} 
+          <input
+            type="text"
+            id="title"
+            value={newBlogTitle}
+            onChange={({ target }) => setNewBlogTitle(target.value)}
           />
         </div>
         <div>
           <label htmlFor="author">author </label>
-          <input 
-            type="text" 
-            id="author" 
-            value={newBlogAuthor} 
-            onChange={({ target }) => setNewBlogAuthor(target.value)} 
+          <input
+            type="text"
+            id="author"
+            value={newBlogAuthor}
+            onChange={({ target }) => setNewBlogAuthor(target.value)}
           />
         </div>
         <div>
           <label htmlFor="url">url </label>
-          <input 
-            type="text" 
-            id="url" 
-            value={newBlogUrl} 
-            onChange={({ target }) => setNewBlogUrl(target.value)} 
+          <input
+            type="text"
+            id="url"
+            value={newBlogUrl}
+            onChange={({ target }) => setNewBlogUrl(target.value)}
           />
         </div>
         <button type='submit' onClick={createBlogPost}>create</button>
       </form>
     </>
   )
+}
+
+NewBlog.propTypes = {
+  handleNewBlogPost: PropTypes.func.isRequired
 }
 
 export default NewBlog

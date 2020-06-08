@@ -13,7 +13,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  
+
   const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
@@ -131,17 +131,17 @@ const App = () => {
       </span>
       <button onClick={handleLogOut}>log out</button>
       <Toggable buttonLabel='create new blog' >
-        <NewBlog 
+        <NewBlog
           handleNewBlogPost={handleNewBlogPost}
         />
       </Toggable>
       <h3>blog post list</h3>
       {blogs
         .sort((A, B) => B.likes - A.likes)
-        .map((blog) => <Blog 
-          key={blog.id} 
-          blog={blog} 
-          handleNewLike={handleNewLike} 
+        .map((blog) => <Blog
+          key={blog.id}
+          blog={blog}
+          handleNewLike={handleNewLike}
           handleDelete={handleDelete}
           user={user}
         />)
