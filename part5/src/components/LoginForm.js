@@ -22,7 +22,7 @@ const LoginForm = ({
           <label htmlFor="password">password</label>
           <input type="password" id="password" value={password} onChange={handlePassword} />
         </div>
-        <button type='submit' onClick={handleLogin}>log in</button>
+        <button type='submit' onClick={handleLogin} id="login-button">log in</button>
       </form>
     </>
   )
