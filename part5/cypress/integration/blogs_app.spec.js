@@ -82,5 +82,22 @@ describe('Blog app', function() {
       cy.contains('like').click()
       cy.contains('likes 1')
     })
+
+    it.only('A blog can be deleted', function() {
+      cy.contains('create new blog').click()
+      const title = 'test-title'
+      const author = 'test-author'
+      const url = 'test-url'
+      cy.get('#title').type(title)
+      cy.get('#author').type(author)
+      cy.get('#url').type(url)
+      cy.get('button[type=submit]').should('contain', 'create').click()
+
+      cy.contains(`${title} ${author}`)
+
+      cy.contains('view').click()
+      cy.contains('delete').click()
+      cy.contains(`${title} ${author}`).should('not.exist')
+    })
   })
 })
