@@ -83,7 +83,7 @@ describe('Blog app', function() {
       cy.contains('likes 1')
     })
 
-    it.only('A blog can be deleted', function() {
+    it('A blog can be deleted', function() {
       cy.contains('create new blog').click()
       const title = 'test-title'
       const author = 'test-author'
@@ -98,6 +98,63 @@ describe('Blog app', function() {
       cy.contains('view').click()
       cy.contains('delete').click()
       cy.contains(`${title} ${author}`).should('not.exist')
+    })
+
+    it.only('Blogs are ordered according to likes', function() {
+      const loggedUser = window.localStorage.getItem('loggedUser')
+      const user = JSON.parse(loggedUser)
+
+      const createBlog = (title, author, url, likes) => {
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          headers: {
+            authorization: `bearer ${user.token}`
+          },
+          body: {
+            title,
+            author,
+            url,
+            likes,
+          }
+        })
+      }
+
+      const checkBlogOrder = (title, likes, index) => {
+        if (index === 0) {
+          expect(title).to.equal('title2')
+          expect(likes).to.equal(7)
+        } else if (index === 1) {
+          expect(title).to.equal('title3')
+          expect(likes).to.equal(5)
+        } else if (index === 2) {
+          expect(title).to.equal('title1')
+          expect(likes).to.equal(4)
+        }
+      }
+
+      createBlog('title1', 'author1', 'url1', 4)
+      createBlog('title2', 'author2', 'url2', 7)
+      createBlog('title3', 'author3', 'url3', 5)
+
+      cy.visit('http://localhost:3000')
+
+      cy.get('.blog').each(($el, index) => {
+        cy.wrap($el).within(() => {
+          let cyTitle = 'hola'
+          let cyLikes = 0
+          cy.get('.show-details').click()
+          // title = cy.get('.blog-title').text()
+          cy.get('.blog-title').then($el => {
+            cyTitle = $el.text()
+          })
+          cy.get('.cy-likes').then($el => {
+            cyLikes = Number.parseInt($el.text())
+            checkBlogOrder(cyTitle, cyLikes, index)
+          })
+        })
+      })
+
     })
   })
 })

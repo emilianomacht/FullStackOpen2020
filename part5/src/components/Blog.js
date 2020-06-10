@@ -23,8 +23,8 @@ const Blog = ({ blog, handleNewLike, handleDelete, user }) => {
   const details = (
     <div>
       <p className='url'>{blog.url}</p>
-      <p className='likes'>likes {blog.likes}{' '}
-        <button onClick={newLike}>like</button>
+      <p className='likes'>likes <span className="cy-likes">{blog.likes}</span>{' '}
+        <button className="like" onClick={newLike}>like</button>
       </p>
       <p className='username'>{blog.user.name}</p>
       {showDeleteButton ? <button onClick={() => handleDelete(blog)}>delete</button> : null}
@@ -33,8 +33,8 @@ const Blog = ({ blog, handleNewLike, handleDelete, user }) => {
 
   return (
     <div className='blog'>
-      {blog.title} {blog.author} {' '}
-      <button onClick={toggleShowDetails}>{showDetails ? 'hide' : 'view'}</button>
+      <span className="blog-title">{blog.title}</span> {blog.author} {' '}
+      <button className="show-details" onClick={toggleShowDetails}>{showDetails ? 'hide' : 'view'}</button>
       {showDetails ? details : null}
     </div>
   )
