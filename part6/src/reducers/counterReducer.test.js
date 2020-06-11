@@ -64,11 +64,15 @@ describe('unicafe reducer', () => {
     });
   });
 
-  test('zero changes nothing', () => {
+  test('zero sets everything to zero', () => {
     const action = {
       type: 'ZERO',
     };
-    const state = initialState;
+    const state = {
+      good: 1,
+      ok: 2,
+      bad: 3,
+    };
 
     deepFreeze(state);
     const newState = counterReducer(state, action);
