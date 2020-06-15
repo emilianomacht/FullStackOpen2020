@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
-const AnecdoteForm = () => {
+const AnecdoteList = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector((state) => state.anecdotes);
+  const anecdotes = useSelector((state) => state.anecdotes
+    .filter((anecdote) => anecdote.content.toLowerCase().match(state.filter.toLowerCase())));
 
   const vote = (anecdote) => {
     dispatch(voteAnecdote(anecdote.id));
@@ -36,4 +37,4 @@ const AnecdoteForm = () => {
   );
 };
 
-export default AnecdoteForm;
+export default AnecdoteList;
