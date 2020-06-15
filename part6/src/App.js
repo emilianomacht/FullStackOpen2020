@@ -12,6 +12,17 @@ const App = () => {
     });
   };
 
+  const addAnecdote = (event) => {
+    event.preventDefault();
+    const content = event.target.content.value;
+    // eslint-disable-next-line no-param-reassign
+    event.target.content.value = '';
+    dispatch({
+      type: 'ADD',
+      data: { content },
+    });
+  };
+
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -29,8 +40,8 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
+      <form onSubmit={(event) => addAnecdote(event)}>
+        <div><input name="content" /></div>
         <button type="submit">create</button>
       </form>
     </div>

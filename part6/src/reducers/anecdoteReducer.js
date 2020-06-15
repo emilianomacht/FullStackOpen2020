@@ -21,12 +21,21 @@ const reducer = (state = initialState, action) => {
   // console.log('state now: ', state);
   // console.log('action', action);
   const newState = [...state];
-  if (action.type === 'VOTE') {
-    const anecdoteToVote = newState.find((anecdote) => anecdote.id === action.data.id);
-    anecdoteToVote.votes += 1;
-    return newState;
+  switch (action.type) {
+    case 'VOTE': {
+      const anecdoteToVote = newState.find((anecdote) => anecdote.id === action.data.id);
+      anecdoteToVote.votes += 1;
+      return newState;
+    }
+    case 'ADD':
+      return state.concat({
+        content: action.data.content,
+        id: getId(),
+        votes: 0,
+      });
+    default:
+      return state;
   }
-  return state;
 };
 
 export default reducer;
