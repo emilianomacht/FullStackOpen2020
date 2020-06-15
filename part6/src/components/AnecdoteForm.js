@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { createAnecdote } from '../reducers/anecdoteReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
@@ -10,6 +11,10 @@ const AnecdoteForm = () => {
     // eslint-disable-next-line no-param-reassign
     event.target.content.value = '';
     dispatch(createAnecdote(content));
+    dispatch(setNotification(`You created the new anecdote: '${content}'`));
+    setTimeout(() => {
+      dispatch(setNotification(''));
+    }, 5000);
   };
 
   return (

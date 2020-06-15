@@ -1,11 +1,18 @@
-const initialState = 'Initial notification';
+// import initialState from './initialState';
+const initialState = 'Initial Notification';
+
+// Action creators
+export const setNotification = (message) => ({
+  type: 'SET',
+  msg: message,
+});
 
 // Main reducer
 const reducer = (state = initialState, action) => {
-  const newState = [...state];
+  let newState = String.toString(state);
   switch (action.type) {
     case 'SET': {
-      // something
+      newState = action.msg;
       return newState;
     }
     default:
