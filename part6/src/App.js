@@ -1,15 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { voteAnecdote, createAnecdote } from './reducers/anecdoteReducer';
 
 const App = () => {
   const anecdotes = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const vote = (id) => {
-    dispatch({
-      type: 'VOTE',
-      data: { id },
-    });
+    dispatch(voteAnecdote(id));
   };
 
   const addAnecdote = (event) => {
@@ -17,10 +15,7 @@ const App = () => {
     const content = event.target.content.value;
     // eslint-disable-next-line no-param-reassign
     event.target.content.value = '';
-    dispatch({
-      type: 'ADD',
-      data: { content },
-    });
+    dispatch(createAnecdote(content));
   };
 
   return (
