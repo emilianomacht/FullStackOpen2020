@@ -30,6 +30,11 @@ export const createAnecdote = (content) => ({
   data: { content },
 });
 
+export const initializeAnecdotes = (data) => ({
+  type: 'INIT_NOTES',
+  data,
+});
+
 // Main reducer
 const reducer = (state = initialState, action) => {
   // console.log('state now: ', state);
@@ -47,6 +52,8 @@ const reducer = (state = initialState, action) => {
         id: getId(),
         votes: 0,
       });
+    case 'INIT_NOTES':
+      return action.data;
     default:
       return state;
   }
