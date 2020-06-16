@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import { connect } from 'react-redux';
-// import { voteAnecdote } from '../reducers/anecdoteReducer';
-// import { setNotification } from '../reducers/notificationReducer';
+import { useDispatch, useSelector, connect } from 'react-redux';
+
+import { voteAnecdote } from '../reducers/anecdoteReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
 // eslint-disable-next-line arrow-body-style
 const AnecdoteList = ({ anecdotes, filter }) => {
-// const dispatch = useDispatch();
-// const anecdotes = useSelector((state) => state.anecdotes
-//   .filter((anecdote) => anecdote.content.toLowerCase().match(state.filter.toLowerCase())));
+  const dispatch = useDispatch();
+  // const anecdotes = useSelector((state) => state.anecdotes
+  //   .filter((anecdote) => anecdote.content.toLowerCase().match(state.filter.toLowerCase())));
 
   // eslint-disable-next-line no-unused-vars
   const vote = (anecdote) => {
-  // dispatch(voteAnecdote(anecdote.id));
-  // dispatch(setNotification(`You voted '${anecdote.content}'`, 5));
+    dispatch(voteAnecdote(anecdote.id));
+    dispatch(setNotification(`You voted '${anecdote.content}'`, 5));
   };
 
   return (

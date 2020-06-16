@@ -1,14 +1,19 @@
 // import initialState from './initialState';
 const initialState = 'Initial Notification';
 
+let curTimeout = null;
+
 // Action creators
 export const setNotification = (message, seconds) => async (dispatch) => {
+  // eslint-disable-next-line no-unused-expressions
+  curTimeout ? clearTimeout(curTimeout) : null;
+
   dispatch({
     type: 'SET',
     msg: message,
   });
 
-  setTimeout(() => {
+  curTimeout = setTimeout(() => {
     dispatch({
       type: 'CLEAR',
     });
