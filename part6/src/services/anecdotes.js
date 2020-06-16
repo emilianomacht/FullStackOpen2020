@@ -15,4 +15,14 @@ const add = async (content) => {
   return response.data;
 };
 
-export default { getAll, add };
+const vote = async (id) => {
+  const { data } = await axios.get(baseUrl);
+  const toVote = data.find((anecdote) => anecdote.id === id);
+  const response = await axios.put(`${baseUrl}/${id}`, {
+    ...toVote,
+    votes: toVote.votes + 1,
+  });
+  return response.data;
+};
+
+export default { getAll, add, vote };
