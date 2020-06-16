@@ -2,10 +2,18 @@
 const initialState = 'Initial Notification';
 
 // Action creators
-export const setNotification = (message) => ({
-  type: 'SET',
-  msg: message,
-});
+export const setNotification = (message, seconds) => async (dispatch) => {
+  dispatch({
+    type: 'SET',
+    msg: message,
+  });
+
+  setTimeout(() => {
+    dispatch({
+      type: 'CLEAR',
+    });
+  }, seconds * 1000);
+};
 
 // Main reducer
 const reducer = (state = initialState, action) => {
@@ -15,6 +23,8 @@ const reducer = (state = initialState, action) => {
       newState = action.msg;
       return newState;
     }
+    case 'CLEAR':
+      return '';
     default:
       return state;
   }

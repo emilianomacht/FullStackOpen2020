@@ -11,10 +11,7 @@ const AnecdoteForm = () => {
     // eslint-disable-next-line no-param-reassign
     event.target.content.value = '';
     dispatch(createAnecdote(content));
-    dispatch(setNotification(`You created the new anecdote: '${content}'`));
-    setTimeout(() => {
-      dispatch(setNotification(''));
-    }, 5000);
+    dispatch(setNotification(`You created the new anecdote: '${content}'`, 5));
   };
 
   return (
