@@ -11,6 +11,7 @@ const AnecdoteList = ({ anecdotes, filter }) => {
 // const anecdotes = useSelector((state) => state.anecdotes
 //   .filter((anecdote) => anecdote.content.toLowerCase().match(state.filter.toLowerCase())));
 
+  // eslint-disable-next-line no-unused-vars
   const vote = (anecdote) => {
   // dispatch(voteAnecdote(anecdote.id));
   // dispatch(setNotification(`You voted '${anecdote.content}'`, 5));
@@ -38,6 +39,7 @@ const AnecdoteList = ({ anecdotes, filter }) => {
   );
 };
 
+// eslint-disable-next-line arrow-body-style
 const mapStateToProps = (state) => {
   // sometimes it is useful to console log from mapStateToProps
   // console.log(state);
