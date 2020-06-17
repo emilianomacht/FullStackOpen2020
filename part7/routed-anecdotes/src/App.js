@@ -16,85 +16,70 @@ const useField = (type) => {
   };
 };
 
-const useCountry = (name) => {
-  const [country, setCountry] = useState(null);
+const useResource = (baseUrl) => {
+  const [resources, setResources] = useState([]);
 
-  useEffect(() => {
-    async function fetchCountry() {
-      if (name === '') return null;
-      try {
-        const response = await axios.get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`);
-        // console.log('response', response);
-        setCountry({
-          ...response.data[0],
-          found: true,
-        });
-      } catch (e) {
-        setCountry({
-          found: false,
-        });
-        // console.log('not found');
-      }
-    }
-    fetchCountry();
-  }, [name]);
+  // ...
 
-  return country;
-};
+  const create = (resource) => {
+    // ...
+  };
 
-const Country = ({ country }) => {
-  if (!country) {
-    return null;
-  }
+  const service = {
+    create,
+  };
 
-  if (!country.found) {
-    // console.log('country', country)
-    return (
-      <div>
-        not found...
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <h3>
-        {country.name}
-        {' '}
-      </h3>
-      <div>
-        capital
-        {' '}
-        {country.capital}
-      </div>
-      <div>
-        population
-        {' '}
-        {country.population}
-      </div>
-      <img src={country.flag} height="100" alt={`flag of ${country.name}`} />
-    </div>
-  );
+  return [
+    resources, service,
+  ];
 };
 
 const App = () => {
-  const nameInput = useField('text');
-  const [name, setName] = useState('');
-  const country = useCountry(name);
+  const content = useField('text');
+  const name = useField('text');
+  const number = useField('text');
 
-  const fetch = (e) => {
-    e.preventDefault();
-    setName(nameInput.value);
+  const [notes, noteService] = useResource('http://localhost:3005/notes');
+  const [persons, personService] = useResource('http://localhost:3005/persons');
+
+  const handleNoteSubmit = (event) => {
+    event.preventDefault();
+    noteService.create({ content: content.value });
+  };
+
+  const handlePersonSubmit = (event) => {
+    event.preventDefault();
+    personService.create({ name: name.value, number: number.value });
   };
 
   return (
     <div>
-      <form onSubmit={fetch}>
-        <input {...nameInput} />
-        <button type="submit">find</button>
+      <h2>notes</h2>
+      <form onSubmit={handleNoteSubmit}>
+        <input {...content} />
+        <button type="submit">create</button>
       </form>
+      {notes.map((n) => <p key={n.id}>{n.content}</p>)}
 
-      <Country country={country} />
+      <h2>persons</h2>
+      <form onSubmit={handlePersonSubmit}>
+        name
+        {' '}
+        <input {...name} />
+        {' '}
+        <br />
+        number
+        {' '}
+        <input {...number} />
+        <button>create</button>
+      </form>
+      {persons.map((n) => (
+        <p key={n.id}>
+          {n.name}
+          {' '}
+          {n.number}
+        </p>
+      ))}
     </div>
   );
 };
