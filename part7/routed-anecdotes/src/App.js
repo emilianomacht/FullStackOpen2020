@@ -22,11 +22,44 @@ const Menu = () => {
   );
 };
 
+const Anecdote = ({ anecdotes }) => {
+  const { id } = useParams();
+  console.log('id', id);
+  const anecdoteToShow = anecdotes.find((anecdote) => anecdote.id === id);
+  return (
+    <div>
+      <strong>
+        {anecdoteToShow.content}
+        {' '}
+        by
+        {' '}
+        {anecdoteToShow.author}
+      </strong>
+      <p>
+        has
+        {' '}
+        {anecdoteToShow.votes}
+        {' '}
+        votes
+      </p>
+      <p>
+        For more info, see:
+        {' '}
+        <a href={anecdoteToShow.info}>{anecdoteToShow.info}</a>
+      </p>
+    </div>
+  );
+};
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map((anecdote) => <li key={anecdote.id}>{anecdote.content}</li>)}
+      {anecdotes.map((anecdote) => (
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
+      ))}
     </ul>
   </div>
 );
@@ -146,6 +179,9 @@ const App = () => {
         <h1>Software anecdotes</h1>
         <Menu />
         <Switch>
+          <Route path="/anecdotes/:id">
+            <Anecdote anecdotes={anecdotes} />
+          </Route>
           <Route path="/create">
             <CreateNew addNew={addNew} />
           </Route>
