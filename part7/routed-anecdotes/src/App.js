@@ -19,10 +19,20 @@ const useField = (type) => {
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([]);
 
-  // ...
+  useEffect(() => {
+    axios
+      .get(baseUrl)
+      .then((response) => {
+        setResources(response.data);
+      });
+  }, []);
 
   const create = (resource) => {
-    // ...
+    axios
+      .post(baseUrl, resource)
+      .then((response) => {
+        setResources(resources.concat(response.data));
+      });
   };
 
   const service = {
@@ -71,7 +81,7 @@ const App = () => {
         number
         {' '}
         <input {...number} />
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
       {persons.map((n) => (
         <p key={n.id}>
