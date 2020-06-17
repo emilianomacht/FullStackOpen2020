@@ -24,7 +24,6 @@ const Menu = () => {
 
 const Anecdote = ({ anecdotes }) => {
   const { id } = useParams();
-  console.log('id', id);
   const anecdoteToShow = anecdotes.find((anecdote) => anecdote.id === id);
   return (
     <div>
@@ -103,6 +102,8 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('');
   const [info, setInfo] = useState('');
 
+  const history = useHistory();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
@@ -111,6 +112,7 @@ const CreateNew = (props) => {
       info,
       votes: 0,
     });
+    history.push('/');
   };
 
   return (
@@ -129,7 +131,7 @@ const CreateNew = (props) => {
           url for more info
           <input name="info" value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
-        <button type="button">create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   );
@@ -156,8 +158,13 @@ const App = () => {
   const [notification, setNotification] = useState('');
 
   const addNew = (anecdote) => {
+    // eslint-disable-next-line no-param-reassign
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(`A new anecdote ${anecdote.content} created!`);
+    setTimeout(() => {
+      setNotification('');
+    }, 10000);
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -178,6 +185,7 @@ const App = () => {
       <Router>
         <h1>Software anecdotes</h1>
         <Menu />
+        <p>{notification}</p>
         <Switch>
           <Route path="/anecdotes/:id">
             <Anecdote anecdotes={anecdotes} />
