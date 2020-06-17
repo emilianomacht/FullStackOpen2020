@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
@@ -122,6 +123,12 @@ const CreateNew = (props) => {
     history.push('/');
   };
 
+  const handleReset = () => {
+    content.onReset();
+    author.onReset();
+    info.onReset();
+  };
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -139,6 +146,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button type="submit">create</button>
+        <button type="button" onClick={handleReset}>reset</button>
       </form>
     </div>
   );
