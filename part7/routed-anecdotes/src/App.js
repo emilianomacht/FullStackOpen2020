@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -18,7 +19,25 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null);
 
-  useEffect();
+  useEffect(() => {
+    async function fetchCountry() {
+      if (name === '') return null;
+      try {
+        const response = await axios.get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`);
+        // console.log('response', response);
+        setCountry({
+          ...response.data[0],
+          found: true,
+        });
+      } catch (e) {
+        setCountry({
+          found: false,
+        });
+        // console.log('not found');
+      }
+    }
+    fetchCountry();
+  }, [name]);
 
   return country;
 };
@@ -29,6 +48,7 @@ const Country = ({ country }) => {
   }
 
   if (!country.found) {
+    // console.log('country', country)
     return (
       <div>
         not found...
@@ -39,18 +59,20 @@ const Country = ({ country }) => {
   return (
     <div>
       <h3>
-        {country.data.name}
+        {country.name}
         {' '}
       </h3>
       <div>
         capital
-        {country.data.capital}
+        {' '}
+        {country.capital}
       </div>
       <div>
         population
-        {country.data.population}
+        {' '}
+        {country.population}
       </div>
-      <img src={country.data.flag} height="100" alt={`flag of ${country.data.name}`} />
+      <img src={country.flag} height="100" alt={`flag of ${country.name}`} />
     </div>
   );
 };
@@ -69,7 +91,7 @@ const App = () => {
     <div>
       <form onSubmit={fetch}>
         <input {...nameInput} />
-        <button>find</button>
+        <button type="submit">find</button>
       </form>
 
       <Country country={country} />
