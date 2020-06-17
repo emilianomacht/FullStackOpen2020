@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -8,6 +10,7 @@ import {
   useParams,
   useHistory,
 } from 'react-router-dom';
+import { useField } from './hooks';
 
 const Menu = () => {
   const padding = {
@@ -98,18 +101,22 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
-  const [info, setInfo] = useState('');
+  // const [content, setContent] = useState('');
+  // const [author, setAuthor] = useState('');
+  // const [info, setInfo] = useState('');
+
+  const content = useField('content', 'text');
+  const author = useField('author', 'text');
+  const info = useField('info', 'text');
 
   const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     });
     history.push('/');
@@ -120,16 +127,16 @@ const CreateNew = (props) => {
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          content
-          <input name="content" value={content} onChange={(e) => setContent(e.target.value)} />
+          <label htmlFor="content">content</label>
+          <input {...content} />
         </div>
         <div>
-          author
-          <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <label htmlFor="author">author</label>
+          <input {...author} />
         </div>
         <div>
-          url for more info
-          <input name="info" value={info} onChange={(e) => setInfo(e.target.value)} />
+          <label htmlFor="info">url for more info</label>
+          <input {...info} />
         </div>
         <button type="submit">create</button>
       </form>
