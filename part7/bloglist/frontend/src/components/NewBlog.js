@@ -1,24 +1,33 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+// import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  newBlog, setNewBlogTitle, setNewBlogAuthor, setNewBlogUrl, toggleFormVisibility,
+} from '../reducers/blogsReducer';
 
-const NewBlog = ({
-  handleNewBlogPost
-}) => {
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
+const NewBlog = () => {
+  const dispatch = useDispatch();
+  const newBlogState = useSelector((state) => state.blogs.newBlog);
+  const user = useSelector((state) => state.user);
 
   const createBlogPost = (event) => {
-    event.preventDefault()
-    handleNewBlogPost({
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl
-    })
-    setNewBlogUrl('')
-    setNewBlogAuthor('')
-    setNewBlogTitle('')
+    event.preventDefault();
+    dispatch(newBlog({
+      title: newBlogState.title,
+      author: newBlogState.author,
+      url: newBlogState.url,
+    }, user));
+  };
+
+  if (!newBlogState.isFormVisible) {
+    return (
+      <div>
+        <button type="submit" onClick={() => dispatch(toggleFormVisibility())}>add new blog</button>
+      </div>
+    );
   }
 
   return (
@@ -30,8 +39,8 @@ const NewBlog = ({
           <input
             type="text"
             id="title"
-            value={newBlogTitle}
-            onChange={({ target }) => setNewBlogTitle(target.value)}
+            value={newBlogState.title}
+            onChange={(event) => dispatch(setNewBlogTitle(event.target.value))}
           />
         </div>
         <div>
@@ -39,8 +48,8 @@ const NewBlog = ({
           <input
             type="text"
             id="author"
-            value={newBlogAuthor}
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
+            value={newBlogState.author}
+            onChange={(event) => dispatch(setNewBlogAuthor(event.target.value))}
           />
         </div>
         <div>
@@ -48,18 +57,19 @@ const NewBlog = ({
           <input
             type="text"
             id="url"
-            value={newBlogUrl}
-            onChange={({ target }) => setNewBlogUrl(target.value)}
+            value={newBlogState.url}
+            onChange={(event) => dispatch(setNewBlogUrl(event.target.value))}
           />
         </div>
-        <button type='submit' onClick={createBlogPost}>create</button>
+        <button type="submit" onClick={createBlogPost}>create</button>
       </form>
+      <button type="submit" onClick={() => dispatch(toggleFormVisibility())}>hide form</button>
     </>
-  )
-}
+  );
+};
 
-NewBlog.propTypes = {
-  handleNewBlogPost: PropTypes.func.isRequired
-}
+// NewBlog.propTypes = {
+//   handleNewBlogPost: PropTypes.func.isRequired,
+// };
 
-export default NewBlog
+export default NewBlog;
