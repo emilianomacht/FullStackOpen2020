@@ -2,11 +2,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { likeBlog } from '../reducers/blogsReducer';
+import { likeBlog, addComment, setComment } from '../reducers/blogsReducer';
 
 const BlogPage = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs.blogs);
+  const comment = useSelector((state) => state.blogs.newComment);
   const { id } = useParams();
   const blogObj = blogs.find((blog) => blog.id === id);
   // console.log('blogObj', blogObj);
@@ -30,6 +31,12 @@ const BlogPage = () => {
         {' '}
         {blogObj.author}
       </p>
+      <h2>comments</h2>
+      <input type="text" id="comment" value={comment} onChange={(event) => dispatch(setComment(event.target.value))} />
+      <button type="button" htmlFor="comment" onClick={() => dispatch(addComment(blogObj, {comment}))}>new comment</button>
+      <ul>
+        {blogObj.comments.map((cmnt, index) => <li key={index}>{cmnt}</li>)}
+      </ul>
     </>
   );
 };

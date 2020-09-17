@@ -9,6 +9,7 @@ const initialState = {
     url: '',
     isFormVisible: false,
   },
+  newComment: '',
 };
 
 // Action creators
@@ -63,6 +64,19 @@ export const newBlog = (blogToAdd, user) => async (dispatch) => {
   });
 };
 
+export const addComment = (blog, comment) => async (dispatch) => {
+  const resp = await blogService.addComment(blog, comment);
+  // console.log('resp', resp);
+  dispatch({
+    type: 'NEW_COMMENT',
+    data: resp.data,
+  });
+};
+
+export const setComment = (value) => ({
+  type: 'SET_COMMENT',
+  data: value,
+});
 export const setNewBlogTitle = (value) => ({
   type: 'NEW_TITLE',
   data: value,
@@ -108,6 +122,14 @@ const reducer = (state = initialState, action) => {
       return newState;
     case 'NEW_URL':
       newState.newBlog.url = action.data;
+      return newState;
+    case 'SET_COMMENT':
+      newState.newComment = action.data;
+      return newState;
+    case 'NEW_COMMENT':
+      newState.blogs = newState.blogs
+        .map((blog) => (blog.id === action.data.id ? action.data : blog));
+      newState.newComment = '';
       return newState;
     case 'TOGGLE_VISIBILITY':
       newState.newBlog.isFormVisible = !newState.newBlog.isFormVisible;

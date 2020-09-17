@@ -33,13 +33,18 @@ const remove = async (postToDelete) => {
   const config = {
     headers: { authorization: token },
   };
-  const resp = await axios.delete(`${baseUrl}/${postToDelete.id}`, {
+  await axios.delete(`${baseUrl}/${postToDelete.id}`, {
     data: postToDelete,
     headers: config.headers,
   });
-  console.log('resp', resp);
+  // console.log('resp', resp);
+};
+
+const addComment = async (blog, comment) => {
+  const resp = await axios.post(`${baseUrl}/${blog.id}/comments`, comment);
+  return resp;
 };
 
 export default {
-  getAll, setToken, create, update, remove,
+  getAll, setToken, create, update, remove, addComment
 };
