@@ -14,6 +14,7 @@ import BlogList from './components/BlogList';
 import User from './components/User';
 
 import { initializeUser } from './reducers/userReducer';
+import BlogPage from './components/BlogPage';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,14 @@ const App = () => {
             </>
           ) : <LoginPage />}
           {/* {user !== null ? <UsersView /> : <Redirect to="/" />} */}
+        </Route>
+        <Route path="/blogs/:id">
+          {user ? (
+            <>
+              <HomePage />
+              <BlogPage />
+            </>
+          ) : <LoginPage />}
         </Route>
         <Route path="/">
           {user ? (
