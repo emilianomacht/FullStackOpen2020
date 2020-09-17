@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { useSelector } from 'react-redux';
+import Table from 'react-bootstrap/Table';
 
 const countBy = require('lodash.countby');
 
@@ -12,7 +13,7 @@ const HomePage = () => {
   return (
     <div>
       <h3>Users</h3>
-      <table>
+      <Table striped>
         <tbody>
           <tr>
             <th>name</th>
@@ -29,7 +30,7 @@ const HomePage = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };
