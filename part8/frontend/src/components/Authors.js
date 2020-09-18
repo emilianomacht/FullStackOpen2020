@@ -1,11 +1,24 @@
+/* eslint-disable react/prop-types */
   
 import React from 'react'
 
-const Authors = (props) => {
-  if (!props.show) {
+const Authors = ({ show, loading, result }) => {
+  if (!show) {
     return null
   }
-  const authors = []
+
+  let authors = []
+
+    if (loading) {
+      return (
+        <>
+          <h2>authors</h2>
+          <div>Loading...</div>
+        </>
+      )
+    } else {
+      authors = result.data.allAuthors;
+    }
 
   return (
     <div>
