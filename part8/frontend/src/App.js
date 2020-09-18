@@ -33,6 +33,7 @@ const App = () => {
         show={page === 'authors'}
         loading={resultAllAuthors.loading}
         result={resultAllAuthors}
+        setError={notify}
       />
 
       <Books

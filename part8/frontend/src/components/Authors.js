@@ -1,8 +1,26 @@
 /* eslint-disable react/prop-types */
   
-import React from 'react'
+import React, { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 
-const Authors = ({ show, loading, result }) => {
+const Authors = ({ show, loading, result, setError }) => {
+  const [newName, setNewName] = useState('');
+  const [newDate, setNewDate] = useState('');
+
+  const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [ { query: ALL_AUTHORS } ],
+    onError: () => {
+      setError('Error, try again')    
+    }
+  })
+
+  const updateAuthor = () => {
+    editAuthor({ variables: { name: newName, setBornTo: parseInt(newDate) } });
+    setNewDate('');
+    setNewName('');
+  }
+
   if (!show) {
     return null
   }
@@ -43,7 +61,24 @@ const Authors = ({ show, loading, result }) => {
           )}
         </tbody>
       </table>
-
+      <h3>Set birthyear</h3>
+      <div>
+        <label htmlFor="newName">name</label>
+        <input
+          id="newName"
+          value={newName}
+          onChange={(event) => setNewName(event.target.value)}
+          />
+      </div>
+      <div>
+        <label htmlFor="newDate">born</label>
+        <input
+          id="newDate"
+          value={newDate}
+          onChange={(event) => setNewDate(event.target.value)}
+          />
+      </div>
+      <button type="button" onClick={updateAuthor}>update author</button>
     </div>
   )
 }
