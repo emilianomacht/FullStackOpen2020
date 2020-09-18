@@ -62,14 +62,18 @@ const Authors = ({ show, loading, result, setError }) => {
         </tbody>
       </table>
       <h3>Set birthyear</h3>
-      <div>
+      {/* <div>
         <label htmlFor="newName">name</label>
         <input
           id="newName"
           value={newName}
           onChange={(event) => setNewName(event.target.value)}
           />
-      </div>
+      </div> */}
+      <select value={newName} onChange={(event) => setNewName(event.target.value)}>
+        {authors.
+          map(author => <option key={author.id} value={author.name}>{author.name}</option>)}
+      </select>
       <div>
         <label htmlFor="newDate">born</label>
         <input
