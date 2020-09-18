@@ -1,11 +1,24 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 
-const Books = (props) => {
-  if (!props.show) {
+const Books = ({ show, loading, result }) => {
+  if (!show) {
     return null
   }
 
-  const books = []
+  let books = []
+
+  if (loading) {
+    return (
+      <>
+        <h2>books</h2>
+        <div>Loading...</div>
+      </>
+    )
+  } else {
+    books = result.data.allBooks;
+  }
+
 
   return (
     <div>
