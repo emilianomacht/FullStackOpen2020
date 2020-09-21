@@ -35,6 +35,7 @@ const Authors = ({ show, loading, result, setError }) => {
         </>
       )
     } else {
+      console.log('result', result)
       authors = result.data.allAuthors;
     }
 

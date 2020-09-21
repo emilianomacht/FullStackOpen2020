@@ -89,15 +89,15 @@ const typeDefs = gql`
     name: String!
     born: Int
     bookCount: Int!
-    id: ID
+    id: ID!
   }
 
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     genres: [String!]!
-    id: ID
+    id: ID!
   }
 
   type Mutation {
