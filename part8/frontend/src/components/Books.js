@@ -1,24 +1,31 @@
+import { useLazyQuery } from '@apollo/client';
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
+import { BOOKS_FILTERED_BY_GENRE } from '../queries';
 
-const Books = ({ show, result }) => {
+const Books = ({ show, allBooks }) => {
   const [books, setBooks] = useState([]);
   const [genres, setGenres] = useState([]);
   const [filter, setFilter] = useState('ALL');
+  const [queryFilter, resultFilterQuery] = useLazyQuery(BOOKS_FILTERED_BY_GENRE);
 
   useEffect(() => {
-    if (result.data) {
-      setBooks(result.data.allBooks);
+    if (allBooks.data) {
+      setBooks(allBooks.data.allBooks);
 
       const genresArr = [];
-      result.data.allBooks.forEach((book) => {
+      allBooks.data.allBooks.forEach((book) => {
         book.genres.forEach((genre) => {
           if (!genresArr.includes(genre)) genresArr.push(genre);
         });
       });
       setGenres(genresArr);
     }
-  }, [result.data]);
+  }, [allBooks.data]);
+
+  useEffect(() => {
+    if (resultFilterQuery.data) setBooks(resultFilterQuery.data.allBooks);
+  }, [resultFilterQuery.data]);
 
   // if (loading) {
   //   return (
@@ -64,14 +71,14 @@ const Books = ({ show, result }) => {
             .map((a) => (
               <tr key={a.title}>
                 <td>{a.title}</td>
-                <td>{a.author}</td>
+                <td>{a.author.name}</td>
                 <td>{a.published}</td>
               </tr>
             ))}
         </tbody>
       </table>
-      <button type="button" onClick={() => setFilter('ALL')}>all genres</button>
-      {genres.map((g) => <button key={g} type="button" onClick={() => setFilter(g)}>{g}</button>)}
+      <button type="button" onClick={() => queryFilter({ variables: { genre: '' } })}>all genres</button>
+      {genres.map((g) => <button key={g} type="button" onClick={() => queryFilter({ variables: { genre: g } })}>{g}</button>)}
     </div>
   );
 };

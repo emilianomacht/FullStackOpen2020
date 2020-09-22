@@ -62,7 +62,7 @@ const App = () => {
 
       <Books
         show={page === 'books'}
-        result={resultAllBooks}
+        allBooks={resultAllBooks}
       />
 
       <Recommended
