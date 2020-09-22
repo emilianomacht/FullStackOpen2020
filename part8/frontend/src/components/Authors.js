@@ -1,43 +1,44 @@
 /* eslint-disable react/prop-types */
-  
-import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 
-const Authors = ({ show, loading, result, setError }) => {
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries';
+
+const Authors = ({
+  show, loading, result, setError,
+}) => {
   const [newName, setNewName] = useState('');
   const [newDate, setNewDate] = useState('');
 
-  const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [ { query: ALL_AUTHORS } ],
+  const [editAuthor] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
     onError: () => {
-      setError('Error, try again')    
-    }
-  })
+      setError('Error, try again');
+    },
+  });
 
   const updateAuthor = () => {
-    editAuthor({ variables: { name: newName, setBornTo: parseInt(newDate) } });
+    editAuthor({ variables: { name: newName, setBornTo: parseInt(newDate, 10) } });
     setNewDate('');
     setNewName('');
-  }
+  };
 
   if (!show) {
-    return null
+    return null;
   }
 
-  let authors = []
+  let authors = [];
 
-    if (loading) {
-      return (
-        <>
-          <h2>authors</h2>
-          <div>Loading...</div>
-        </>
-      )
-    } else {
-      console.log('result', result)
-      authors = result.data.allAuthors;
-    }
+  if (loading) {
+    return (
+      <>
+        <h2>authors</h2>
+        <div>Loading...</div>
+      </>
+    );
+  }
+  // console.log('result', result);
+  authors = result.data.allAuthors;
 
   return (
     <div>
@@ -45,7 +46,7 @@ const Authors = ({ show, loading, result, setError }) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th />
             <th>
               born
             </th>
@@ -53,13 +54,13 @@ const Authors = ({ show, loading, result, setError }) => {
               books
             </th>
           </tr>
-          {authors.map(a =>
+          {authors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
       <h3>Set birthyear</h3>
@@ -72,20 +73,22 @@ const Authors = ({ show, loading, result, setError }) => {
           />
       </div> */}
       <select value={newName} onChange={(event) => setNewName(event.target.value)}>
-        {authors.
-          map(author => <option key={author.id} value={author.name}>{author.name}</option>)}
+        {authors
+          .map((author) => <option key={author.id} value={author.name}>{author.name}</option>)}
       </select>
       <div>
-        <label htmlFor="newDate">born</label>
-        <input
-          id="newDate"
-          value={newDate}
-          onChange={(event) => setNewDate(event.target.value)}
+        <label htmlFor="newDate">
+          born
+          <input
+            id="newDate"
+            value={newDate}
+            onChange={(event) => setNewDate(event.target.value)}
           />
+        </label>
       </div>
       <button type="button" onClick={updateAuthor}>update author</button>
     </div>
-  )
-}
+  );
+};
 
-export default Authors
+export default Authors;
