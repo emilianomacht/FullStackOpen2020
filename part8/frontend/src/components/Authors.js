@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries';
 
 const Authors = ({
-  show, loading, result, setError,
+  show, result, setError,
 }) => {
   const [newName, setNewName] = useState('');
   const [newDate, setNewDate] = useState('');
@@ -29,14 +29,14 @@ const Authors = ({
 
   let authors = [];
 
-  if (loading) {
-    return (
-      <>
-        <h2>authors</h2>
-        <div>Loading...</div>
-      </>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <h2>authors</h2>
+  //       <div>Loading...</div>
+  //     </>
+  //   );
+  // }
   // console.log('result', result);
   authors = result.data.allAuthors;
 

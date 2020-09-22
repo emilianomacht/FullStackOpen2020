@@ -4,7 +4,8 @@ import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
 import LoginForm from './components/LoginForm';
-import { ALL_AUTHORS, ALL_BOOKS } from './queries';
+import Recommended from './components/Recommended';
+import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries';
 
 const App = () => {
   const [page, setPage] = useState('authors');
@@ -13,6 +14,7 @@ const App = () => {
 
   const resultAllAuthors = useQuery(ALL_AUTHORS);
   const resultAllBooks = useQuery(ALL_BOOKS);
+  const resultMe = useQuery(ME);
   const client = useApolloClient();
 
   const notify = (message) => {
@@ -26,6 +28,12 @@ const App = () => {
     setToken(null);
     localStorage.clear();
     client.resetStore();
+  };
+
+  if (resultAllAuthors.loading || resultAllBooks.loading) {
+    return (
+      <h2>Loading app...</h2>
+    );
   }
 
   return (
@@ -38,6 +46,7 @@ const App = () => {
           ? (
             <>
               <button type="button" onClick={() => setPage('add')}>add book</button>
+              <button type="button" onClick={() => setPage('recommended')}>recommended</button>
               <button type="button" onClick={() => logout()}>logout</button>
             </>
           )
@@ -47,15 +56,19 @@ const App = () => {
 
       <Authors
         show={page === 'authors'}
-        loading={resultAllAuthors.loading}
         result={resultAllAuthors}
         setError={notify}
       />
 
       <Books
         show={page === 'books'}
-        loading={resultAllBooks.loading}
         result={resultAllBooks}
+      />
+
+      <Recommended
+        show={page === 'recommended'}
+        resultMe={resultMe}
+        resultAllBooks={resultAllBooks}
       />
 
       <NewBook

@@ -100,8 +100,9 @@ const resolvers = {
       });
       return authors;
     },
-    me: (root, args, context) => {
-      return context.currentUser;
+    me: (root, args, { currentUser }) => {
+      console.log('currentUser', currentUser)
+      return currentUser;
     },
   },
   Mutation: {
@@ -174,7 +175,7 @@ const resolvers = {
       
     },
     createUser: (root, args) => {
-    const user = new User({ username: args.username })
+    const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
 
     return user.save()
       .catch(error => {
@@ -208,6 +209,7 @@ const resolvers = {
       if (auth && auth.toLowerCase().startsWith('bearer ')) {
         const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
         const currentUser = await User.findById(decodedToken.id);
+        // console.log('in server, context, currentUser', currentUser)
         return { currentUser };
       }
     }
