@@ -101,7 +101,7 @@ const resolvers = {
       return authors;
     },
     me: (root, args, { currentUser }) => {
-      console.log('currentUser', currentUser)
+      // console.log('currentUser', currentUser)
       return currentUser;
     },
   },
@@ -140,7 +140,13 @@ const resolvers = {
       });
 
       try {
-        return newBook.save()
+        let respSave = await newBook.save();
+        respSave._doc.author = {
+          name: author.name,
+          favoriteGenre: author.favoriteGenre
+        }
+        return respSave;
+
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
