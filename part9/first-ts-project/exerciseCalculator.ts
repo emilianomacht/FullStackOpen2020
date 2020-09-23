@@ -8,6 +8,24 @@ interface Result {
   average: number;
 }
 
+interface ParseValues {
+  log: Array<number>;
+  target: number;
+}
+
+const parseArgumentsEx = (args: Array<string>): ParseValues => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      target: Number(args[2]),
+      log: args.slice(3, args.length + 1).map((n) => Number(n)),
+    };
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+}
+
 const calculateExercises = (log: Array<number>, target: number): Result => {
   const average: number = log.reduce((acc: number, cur: number) => acc + cur, 0) / log.length;
 
@@ -34,7 +52,8 @@ const calculateExercises = (log: Array<number>, target: number): Result => {
 }
 
 try {
-  console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+  const { log, target } = parseArgumentsEx(process.argv);
+  console.log(calculateExercises(log, target));
 } catch (e) {
   console.log('Error, something bad happened, message: ', e.message);
 }
