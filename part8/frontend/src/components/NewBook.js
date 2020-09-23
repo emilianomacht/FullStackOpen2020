@@ -13,10 +13,9 @@ const NewBook = ({ show, setError }) => {
   const [addBook] = useMutation(ADD_BOOK, {
     // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
-      setError(error.message);
+      setError(error.messages);
     },
     update: (store, response) => {
-      console.log(response.data);
       const dataInStore = store.readQuery({ query: ALL_BOOKS });
       store.writeQuery({
         query: ALL_BOOKS,

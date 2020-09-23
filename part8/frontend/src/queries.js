@@ -18,6 +18,7 @@ query {
     author {
       name
     }
+    id
   }
 }
 `
@@ -80,4 +81,16 @@ export const ME = gql`
       favoriteGenre
     }
   }
+`
+
+export const BOOK_ADDED = gql`  
+subscription {    
+  bookAdded {      
+    title
+    author {
+      name
+    }
+    published
+  }  
+}
 `
