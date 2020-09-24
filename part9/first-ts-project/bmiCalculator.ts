@@ -1,9 +1,9 @@
-interface GetValues {
+export interface GetValues {
   value1: number;
   value2: number;
 }
 
-const parseArguments = (args: Array<string>): GetValues => {
+export const parseArguments = (args: Array<string>): GetValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
@@ -17,7 +17,7 @@ const parseArguments = (args: Array<string>): GetValues => {
   }
 }
 
-const bmiCalculator = (height: number, weight: number): string => {
+export const bmiCalculator = (height: number, weight: number): string => {
   const BMI : number = weight/height/height * 10000;
   
   if (BMI < 15) return 'Very severely underweight';
@@ -27,7 +27,7 @@ const bmiCalculator = (height: number, weight: number): string => {
   if (BMI < 30) return 'Overweight';
   if (BMI < 35) return 'Obese Class I (Moderately obese)';
   if (BMI < 40) return 'Obese Class II (Severely obese)';
-  if (BMI > 40) return 'Obese Class III (Very severely obese)';
+  else return 'Obese Class III (Very severely obese)';
 }
 
 try {
