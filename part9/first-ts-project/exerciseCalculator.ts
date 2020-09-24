@@ -24,20 +24,20 @@ const parseArgumentsEx = (args: Array<string>): ParseValues => {
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 const calculateExercises = (log: Array<number>, target: number): Result => {
   const average: number = log.reduce((acc: number, cur: number) => acc + cur, 0) / log.length;
 
-  let rating: number = 2;
-  let ratingDescription: string = 'acceptable';
+  let rating = 2;
+  let ratingDescription = 'acceptable';
   if (average > target * 1.1) {
     rating = 3;
-    ratingDescription = 'exceptional'
+    ratingDescription = 'exceptional';
   }
   else if (average < target * 0.9) {
     rating = 1;
-    ratingDescription = 'could be improved'
+    ratingDescription = 'could be improved';
   }
 
   return {
@@ -48,12 +48,14 @@ const calculateExercises = (log: Array<number>, target: number): Result => {
     ratingDescription: ratingDescription,
     target: target,
     average: average,
-  }
-}
+  };
+};
 
 try {
   const { log, target } = parseArgumentsEx(process.argv);
   console.log(calculateExercises(log, target));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const msg = String(e.message);
+  console.log('Error, something bad happened, message: ', msg);
 }

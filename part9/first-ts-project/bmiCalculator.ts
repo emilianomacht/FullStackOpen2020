@@ -11,11 +11,11 @@ export const parseArguments = (args: Array<string>): GetValues => {
     return {
       value1: Number(args[2]),
       value2: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 export const bmiCalculator = (height: number, weight: number): string => {
   const BMI : number = weight/height/height * 10000;
@@ -28,11 +28,13 @@ export const bmiCalculator = (height: number, weight: number): string => {
   if (BMI < 35) return 'Obese Class I (Moderately obese)';
   if (BMI < 40) return 'Obese Class II (Severely obese)';
   else return 'Obese Class III (Very severely obese)';
-}
+};
 
 try {
   const { value1, value2 } = parseArguments(process.argv);
   console.log(bmiCalculator(value1, value2));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const msg = String(e.message);
+  console.log('Error, something bad happened, message: ', msg);
 }

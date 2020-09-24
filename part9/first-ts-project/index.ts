@@ -7,11 +7,11 @@ app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!');
 });
 
-const checkBmiQuery = (query: object) => {
+const checkBmiQuery = (query: Record<string, unknown>) => {
   if (Object.keys(query).length !== 2) throw new Error('Wrong amount of arguments!');
   if (!Object.keys(query).includes('height') || !Object.keys(query).includes('weight'))
     throw new Error('Height or weight property missing');
-}
+};
 
 app.get('/bmi', (req, res) => {
   try {
@@ -22,12 +22,14 @@ app.get('/bmi', (req, res) => {
       height: req.query.height,
       bmi
     });
-  } catch(e) {
+  } catch(error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const msg = String(error.message);
     res.json({
-      "error": e.message
+      "error": msg
     });
   }
-})
+});
 
 const PORT = 3003;
 
