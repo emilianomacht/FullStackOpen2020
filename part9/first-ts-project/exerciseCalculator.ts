@@ -1,4 +1,4 @@
-interface Result {
+export interface Result {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -26,7 +26,7 @@ const parseArgumentsEx = (args: Array<string>): ParseValues => {
   }
 };
 
-const calculateExercises = (log: Array<number>, target: number): Result => {
+export const calculateExercises = (log: Array<number>, target: number): Result => {
   const average: number = log.reduce((acc: number, cur: number) => acc + cur, 0) / log.length;
 
   let rating = 2;
