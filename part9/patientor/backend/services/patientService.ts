@@ -1,33 +1,22 @@
 import patientsData from '../data/patients.json';
 
-import { Patient, NonSensitivePatient } from '../types';
+import { Patient, NonSensitivePatient, NewPatient } from '../types';
+import utils from '../utils';
 
 // const patients: Array<NonSensitivePatient> = patientsData;
 
 const getNonSensitivePatientsData = (): Array<NonSensitivePatient> => {
-  return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({ 
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation
-   }));
+  return patientsData.map((obj) => utils.toNonSensitivePatient(obj));
 };
 
-const addPatient = (
-  name: string, ssn: string, dateOfBirth: string, occupation: string, gender: string
-  ): Patient => {
+const addPatient = ( entry: NewPatient): Patient => {
 
     const newPatient = {
       id: String(Math.max(...patientsData.map(p => Number(p.id))) + 1),
-      name,
-      ssn,
-      dateOfBirth,
-      occupation,
-      gender,
+      ...entry,
     };
     patientsData.push(newPatient);
     return newPatient;
-} 
+};
 
 export default { getNonSensitivePatientsData, addPatient };
