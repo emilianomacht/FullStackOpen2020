@@ -9,26 +9,38 @@ export type Action =
   | {
       type: "ADD_PATIENT";
       payload: Patient;
-    };
+    }
+  | {
+    type: "SET_PATIENT";
+    payload: Patient;
+  };
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_PATIENT_LIST":
       return {
         ...state,
-        patients: {
+        patientsNonSensitive: {
           ...action.payload.reduce(
             (memo, patient) => ({ ...memo, [patient.id]: patient }),
             {}
           ),
-          ...state.patients
+          ...state.patientsNonSensitive
         }
       };
     case "ADD_PATIENT":
       return {
         ...state,
-        patients: {
-          ...state.patients,
+        patientsNonSensitive: {
+          ...state.patientsNonSensitive,
+          [action.payload.id]: action.payload
+        }
+      };
+    case "SET_PATIENT":
+      return {
+        ...state,
+        patientsSensitive: {
+          ...state.patientsSensitive,
           [action.payload.id]: action.payload
         }
       };
