@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Gender, NewPatient, NonSensitivePatient, Patient } from './types';
+import { Entry, Gender, NewPatient, NonSensitivePatient, Patient } from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -53,6 +53,17 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
+const areEntries = (params: any): params is Entry[] => {
+  return Array.isArray(params);
+};
+
+const parseEntries = (entries: any): Entry[] => {
+  if (!entries || !areEntries(entries)) {      
+    throw new Error('Incorrect or missing gender');
+  }
+  return entries;
+};
+
 const toNewPatient = (object: any): NewPatient => {
   return {
     name: parseName(object.name),
@@ -83,7 +94,7 @@ const toPatient = (object: any): Patient => {
     dateOfBirth: parseBirth(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
-    entries: []
+    entries: parseEntries(object.entries)
   };
 };
 
