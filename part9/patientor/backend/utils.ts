@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Gender, NewPatient, NonSensitivePatient } from './types';
+import { Gender, NewPatient, NonSensitivePatient, Patient } from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -60,6 +60,7 @@ const toNewPatient = (object: any): NewPatient => {
     dateOfBirth: parseBirth(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
+    entries: []
   };
 };
 
@@ -70,7 +71,20 @@ const toNonSensitivePatient = (object: any): NonSensitivePatient => {
     dateOfBirth: parseBirth(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
+    entries: []
   };
 };
 
-export default { toNewPatient, toNonSensitivePatient };
+const toPatient = (object: any): Patient => {
+  return {
+    name: parseName(object.name),
+    ssn: parseSSN(object.ssn),
+    id: parseId(object.id),
+    dateOfBirth: parseBirth(object.dateOfBirth),
+    gender: parseGender(object.gender),
+    occupation: parseOccupation(object.occupation),
+    entries: []
+  };
+};
+
+export default { toNewPatient, toNonSensitivePatient, toPatient };

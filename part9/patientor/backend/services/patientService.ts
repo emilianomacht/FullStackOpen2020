@@ -9,6 +9,12 @@ const getNonSensitivePatientsData = (): Array<NonSensitivePatient> => {
   return patientsData.map((obj) => utils.toNonSensitivePatient(obj));
 };
 
+const findPatientById = (id: string): Patient | null => {
+  const patientFound = patientsData.find(p => p.id === id);
+  if (!patientFound) return null;
+  return utils.toPatient(patientFound);
+};
+
 const addPatient = ( entry: NewPatient): Patient => {
 
     const newPatient = {
@@ -19,4 +25,4 @@ const addPatient = ( entry: NewPatient): Patient => {
     return newPatient;
 };
 
-export default { getNonSensitivePatientsData, addPatient };
+export default { getNonSensitivePatientsData, addPatient, findPatientById };
