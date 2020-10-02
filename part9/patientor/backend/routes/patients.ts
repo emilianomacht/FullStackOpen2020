@@ -13,6 +13,14 @@ router.get('/:id', (req, res) => {
   res.send(patientService.findPatientById(id));
 });
 
+router.post('/:id/entries', (req, res) => {
+  const id = req.params.id;
+  console.log('req.body', req.body);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const entry = utils.toEntry(req.body);
+  res.send(patientService.addEntry(entry, id));
+});
+
 router.post('/', (req, res) => {
   // const { name, ssn, dateOfBirth, occupation, gender } = req.body;
   // const newPatient = patientService.addPatient({

@@ -57,7 +57,7 @@ export interface OccupationalHealthCareEntry extends BaseEntry {
 }
 
 export interface HospitalEntry extends BaseEntry {
-  specialist: string;
+  type: "Hospital";
   discharge: {
     date: string;
     criteria: string;

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Entry, Gender, NewPatient, NonSensitivePatient, Patient } from './types';
+import { Entry, Gender, HealthCheckEntry, HealthCheckRating, HospitalEntry, NewPatient, NonSensitivePatient, OccupationalHealthCareEntry, Patient } from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -98,4 +98,92 @@ const toPatient = (object: any): Patient => {
   };
 };
 
-export default { toNewPatient, toNonSensitivePatient, toPatient };
+const parseDescription = (description: any): string => {
+  if (!description || !isString(description)) {
+    throw new Error('Incorrect or missing description');
+  }
+  return description;
+};
+
+const parseDate = (date: any): string => {
+  if (!date || !isString(date)) {
+    throw new Error('Incorrect or missing date');
+  }
+  return date;
+};
+
+const parseSpecialist = (specialist: any): string => {
+  if (!specialist || !isString(specialist)) {
+    throw new Error('Incorrect or missing specialist');
+  }
+  return specialist;
+};
+
+const areDiagCodes = (params: any): params is string[] => {
+  return Array.isArray(params);
+};
+
+const parseCodes = (diagCodes: any): string[] => {
+  if (!diagCodes || !areDiagCodes(diagCodes)) {      
+    throw new Error('Incorrect or missing diagnoses codes');
+  }
+  return diagCodes;
+};
+
+const isHealthCheck = (param: any): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseHealthCheck = (healthCheck: any): HealthCheckRating => {
+  if (!healthCheck || !isHealthCheck(healthCheck)) {      
+    throw new Error('Incorrect or missing health check rating');
+  }
+  return healthCheck;
+};
+
+const parseEmployerName = (employerName: any): string => {
+  if (!employerName || !isString(employerName)) {
+    throw new Error('Incorrect or missing employerName');
+  }
+  return employerName;
+};
+
+const parseCriteria = (criteria: any): string => {
+  if (!criteria || !isString(criteria)) {
+    throw new Error('Incorrect or missing criteria');
+  }
+  return criteria;
+};
+
+
+const isEntry = (object: any): object is Entry => {
+  let objAsEntry = object as Entry;
+  objAsEntry.description = parseDescription(object.description);
+  objAsEntry.date = parseDate(object.date);
+  objAsEntry.specialist = parseSpecialist(object.specialist);
+  if (object.diagnosesCodes) objAsEntry.diagnosisCodes = parseCodes(object.diagnosesCodes);
+  if (object.type === 'HealthCheck') {
+    objAsEntry = objAsEntry as HealthCheckEntry;
+    objAsEntry.healthCheckRating = parseHealthCheck(object.healthCheckRating);
+    return true;
+  }
+  if (object.type === 'OccupationalHealthcare') {
+    objAsEntry = objAsEntry as OccupationalHealthCareEntry;
+    objAsEntry.employerName = parseEmployerName(object.employerName);
+    return true;
+  }
+  if (object.type === 'Hospital') {
+    objAsEntry = objAsEntry as HospitalEntry;
+    objAsEntry.discharge.date = parseDate(object.discharge.date);
+    objAsEntry.discharge.criteria = parseCriteria(object.discharge.criteria);
+    return true;
+  }
+  return false;
+};
+
+const toEntry = (object: any): Entry => {
+   if (isEntry(object)) return object;
+   else return {} as Entry; 
+};
+
+export default { toNewPatient, toNonSensitivePatient, toPatient, toEntry };

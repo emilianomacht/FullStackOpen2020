@@ -1,6 +1,6 @@
 import patientsData from '../data/patients';
 
-import { Patient, NonSensitivePatient, NewPatient } from '../types';
+import { Patient, NonSensitivePatient, NewPatient, Entry } from '../types';
 import utils from '../utils';
 
 // const patients: Array<NonSensitivePatient> = patientsData;
@@ -15,7 +15,7 @@ const findPatientById = (id: string): Patient | null => {
   return utils.toPatient(patientFound);
 };
 
-const addPatient = ( entry: NewPatient): Patient => {
+const addPatient = (entry: NewPatient): Patient => {
 
     const newPatient = {
       id: String(Math.max(...patientsData.map(p => Number(p.id))) + 1),
@@ -25,4 +25,20 @@ const addPatient = ( entry: NewPatient): Patient => {
     return newPatient;
 };
 
-export default { getNonSensitivePatientsData, addPatient, findPatientById };
+const addEntry = (entry: Entry, id: string): Entry => {
+  const patient = findPatientById(id);
+  if (patient) {
+    entry = {
+      ...entry,
+      id: String(`${patient.entries.map(e => String(e.id))[0]}a`),
+    };
+  }
+  if (patient && entry) {
+    patient.entries.push(entry);
+    return entry;
+  } else {
+    return {} as Entry;
+  }
+};
+
+export default { getNonSensitivePatientsData, addPatient, findPatientById, addEntry };
