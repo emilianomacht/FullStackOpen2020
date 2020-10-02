@@ -25,17 +25,19 @@ const PatientListPage: React.FC = () => {
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
-    try {
-      const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
-        values
-      );
-      dispatch(addPatient(newPatient));
-      closeModal();
-    } catch (e) {
-      console.error(e.response.data);
-      setError(e.response.data.error);
-    }
+    await axios.get<void>(`${apiBaseUrl}/ping`);
+    console.dir(values);
+    // try {
+    //   const { data: newPatient } = await axios.post<Patient>(
+    //     `${apiBaseUrl}/patients`,
+    //     values
+    //   );
+    //   dispatch(addPatient(newPatient));
+    //   closeModal();
+    // } catch (e) {
+    //   console.error(e.response.data);
+    //   setError(e.response.data.error);
+    // }
   };
 
   return (

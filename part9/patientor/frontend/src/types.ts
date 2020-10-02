@@ -22,7 +22,7 @@ export interface Patient {
 
 export type Entry = HospitalEntry | OccupationalHealthCareEntry | HealthCheckEntry;
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   type: string;
   description: string;
@@ -57,5 +57,5 @@ export interface HospitalEntry extends BaseEntry {
   discharge: {
     date: string;
     criteria: string;
-  }
+  };
 }

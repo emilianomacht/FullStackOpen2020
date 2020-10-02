@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, Icon, Message } from 'semantic-ui-react';
+import { Header, Icon, Message } from 'semantic-ui-react';
 import { useStateValue } from '../state/state';
 import { Entry } from '../types';
 
